@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 
+// https://commons.apache.org/proper/commons-configuration/userguide/user_guide.html
+// https://commons.apache.org/proper/commons-configuration/userguide/quick_start.html
+
 public class NASControl {
 
     private static Logger log = LoggerFactory.getLogger(NASControl.class);
@@ -49,9 +52,12 @@ public class NASControl {
         final PopupMenu popup = new PopupMenu();
 
         // set icons
-        //String imagePath = "/images/bulb.gif";
-        //String imagePath = "/images/icons8-cloud-database-48.png";
-        String imagePath = "/images/icons8-cloud-database-64-blue.png";
+        //
+        String imagePath = "/images/cloud-computing-gray-512x512.png";
+        //String imagePath = "/images/cloud-computing-white-512x512.png";
+        //String imagePath = "/images/cloud-computing-white-error-512x512.png";
+        //String imagePath = "/images/cloud-computing-black-512x512.png";
+        //String imagePath = "/images/cloud-computing-black-error-512x512.png";
 
         final TrayIcon trayIcon = new TrayIcon(createImage(imagePath, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
