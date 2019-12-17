@@ -9,17 +9,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
-
-// https://commons.apache.org/proper/commons-configuration/userguide/user_guide.html
-// https://commons.apache.org/proper/commons-configuration/userguide/quick_start.html
+import java.util.Arrays;
+import java.util.List;
 
 public class NASControl {
 
     private static Logger log = LoggerFactory.getLogger(NASControl.class);
 
+    private static Config config;
+
     public static void main(String... args) {
 
-        log.info("start NASControl with args:", args);
+        List<String> liArgs = Arrays.asList(args);
+        log.info("start NASControl with args: {}", liArgs);
+
+        config = ConfigUtils.loadConfiguration();
 
         try {
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
@@ -68,6 +72,8 @@ public class NASControl {
         MenuItem openWebUI = new MenuItem("Open WebUI");
         MenuItem exitItem = new MenuItem("Exit");
 
+        //sendWOL.setEnabled(false);
+
         popup.add(sendWOL);
         popup.add(openWebUI);
 
@@ -112,8 +118,8 @@ public class NASControl {
 
     private static void sendWakeOnLan() {
         // FIXME: make config value for MAC and Broadcast address
-        String strBroadcastAddress = "192.168.1.255";
-        String strMacAddress = "70:85:C2:DD:18:6F";
+        String strMacAddress = config.getMacAddress();
+        String strBroadcastAddress = config.getBroadcastAddress();
 
         log.info("sending WoL packet for MAC {} to {}", strMacAddress, strBroadcastAddress);
 
@@ -127,8 +133,7 @@ public class NASControl {
     }
 
     private static void openWebUI() {
-        // FIXME: make config value for nas webUI
-        String urlNasWebUI = "http://freenas.local";
+        String urlNasWebUI = config.getNasAdminUI();
         String shellCommand = String.format("open %s", urlNasWebUI);
 
         log.info("try to spawn subprocess: {}", shellCommand);

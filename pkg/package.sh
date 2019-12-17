@@ -12,14 +12,16 @@ if [ -f $OUTPUT_DMG_FILE ]; then
 fi
 
 # make it read/write: -format UDRW
-hdiutil create -format UDRW  -size 5m -srcfolder ${PROJECT}.app $OUTPUT_DMG_FILE
+hdiutil create -format UDRW  -size 10m -srcfolder ${PROJECT}.app $OUTPUT_DMG_FILE
 #hdiutil internet-enable -yes $OUTPUT_DMG_FILE
 
 # create the /Application link in the dmg file
 #
 open $OUTPUT_DMG_FILE
 sleep 3
+pushd >/dev/null 2>&1
 cd /Volumes/${PROJECT}
 ln -s /Applications Applications
 cd /
+popd >/dev/null 2>&1
 umount /Volumes/${PROJECT}
