@@ -69,3 +69,19 @@ https://developer.apple.com/library/archive/documentation/Java/Conceptual/Java14
 https://github.com/libgdx/packr
 https://github.com/Jorl17/jar2app
 https://centerkey.com/mac/java/
+
+
+network address:
+https://stackoverflow.com/questions/1221517/how-to-get-subnet-mask-of-local-system-using-java
+
+cli:
+https://commons.apache.org/proper/commons-cli/usage.html
+
+icon in dock:
+https://stackoverflow.com/questions/6006173/how-do-you-change-the-dock-icon-of-a-java-program
+
+do not show in dock mac os:
+https://www.cnet.com/news/prevent-an-applications-dock-icons-from-showing-in-os-x/
+
+
+open -a NASControl —-args eins zwei drei
