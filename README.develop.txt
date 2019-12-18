@@ -84,4 +84,9 @@ do not show in dock mac os:
 https://www.cnet.com/news/prevent-an-applications-dock-icons-from-showing-in-os-x/
 
 
-open -a NASControl —-args eins zwei drei
+# console output is hidden !!!
+open -a /Applications/NASControl.app --args -v
+
+# with output on the console
+/Applications/NASControl.app/Contents/MacOS/nascontrol -v
+
