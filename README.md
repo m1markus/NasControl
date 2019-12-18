@@ -24,12 +24,22 @@ java -jar ./target/nascontrol.jar
 ```
 
 ## Installation:
-Create a config file in your home directory.
+
+1. Create a config file in your home directory.
+
 ```
 file: /Users/yourUserId/nascontrol.conf
 ```
+
 ```
 network.broadcast_address = 192.168.1.255
 nas.mac_address = FF:A9:C9:D1:38:1F
 nas.adminui_url = http://myfreenas.local
+```
+
+2. Install the NASControl.dmg
+
+3. Start the application
+```
+open -a /Applications/NASControl.app
 ```
