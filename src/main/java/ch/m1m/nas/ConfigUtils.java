@@ -40,7 +40,6 @@ public class ConfigUtils {
 
                 if (configNewCreated) {
                     log.info("config initialized with defaults");
-                    //config.init();
                 }
             } else {
                 log.info("load existing configuration from: {}", configFileName);

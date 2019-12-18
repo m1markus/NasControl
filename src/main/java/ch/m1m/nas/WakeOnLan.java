@@ -85,5 +85,4 @@ public class WakeOnLan {
 
         return bytes;
     }
-
 }
