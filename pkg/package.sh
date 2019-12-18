@@ -1,3 +1,4 @@
+#!/bin/sh
 
 JAR_FILE=nascontrol.jar
 PROJECT=NASControl
@@ -19,9 +20,14 @@ hdiutil create -format UDRW  -size 10m -srcfolder ${PROJECT}.app $OUTPUT_DMG_FIL
 #
 open $OUTPUT_DMG_FILE
 sleep 3
-pushd >/dev/null 2>&1
+pushd `pwd` >/dev/null 2>&1
 cd /Volumes/${PROJECT}
 ln -s /Applications Applications
 cd /
 popd >/dev/null 2>&1
 umount /Volumes/${PROJECT}
+
+if [ -f $TARGET_JAR_DIR/$JAR_FILE ]; then
+  echo "delete... file: $TARGET_JAR_DIR/$JAR_FILE"
+  rm $TARGET_JAR_DIR/$JAR_FILE
+fi
