@@ -6,7 +6,7 @@
 
     <groupId>ch.m1m.nas</groupId>
     <artifactId>nascontrol</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <name>nascontrol</name>
 
