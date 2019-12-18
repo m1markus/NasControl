@@ -1,5 +1,6 @@
 package ch.m1m.nas;
 
+import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +15,21 @@ import java.util.List;
 
 public class NASControl {
 
+    private static final String PROGRAM_NAME = "NASControl";
+    private static final String OPT_HELP = "help";
+    private static final String OPT_VERSION = "version";
+
     private static Logger log = LoggerFactory.getLogger(NASControl.class);
 
     private static Config config;
 
+
     public static void main(String... args) {
 
+        CommandLine clArgs = setupAndParseArgs(args);
+
         List<String> liArgs = Arrays.asList(args);
-        log.info("start NASControl {} with args: {}", Version.getProjectVersion(), liArgs);
+        log.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), liArgs);
 
         config = ConfigUtils.loadConfiguration();
 
@@ -35,16 +43,48 @@ public class NASControl {
             }
             //UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
             UIManager.setLookAndFeel(systemLookAndFeel);
+            // Turn off metal's use of bold fonts
+            UIManager.put("swing.boldMetal", Boolean.FALSE);
 
         } catch (Exception e) {
             log.error("Something went wrong", e);
             System.exit(1);
         }
 
-        // Turn off metal's use of bold fonts
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
-
         createAndShowGUI();
+    }
+
+    public static CommandLine setupAndParseArgs(String... args) {
+
+        // https://commons.apache.org/proper/commons-cli/usage.html
+        //
+        Options options = new Options();
+        options.addOption("h", OPT_HELP, false, "print usage");
+        options.addOption("v", OPT_VERSION, false, "print version information");
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine clArgs = null;
+
+        try {
+            clArgs = parser.parse(options, args);
+
+            if (clArgs.hasOption(OPT_HELP)) {
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp(PROGRAM_NAME + " [options]", options);
+                System.exit(0);
+            }
+
+            if (clArgs.hasOption(OPT_VERSION)) {
+                System.out.println(PROGRAM_NAME + " version " + Version.getProjectVersion());
+                System.exit(0);
+            }
+
+        } catch (ParseException e) {
+            log.error("parsing command line: {}", e.getMessage());
+            System.exit(1);
+        }
+
+        return clArgs;
     }
 
     private static void createAndShowGUI() {
