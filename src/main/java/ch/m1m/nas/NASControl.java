@@ -21,7 +21,7 @@ public class NASControl {
     public static void main(String... args) {
 
         List<String> liArgs = Arrays.asList(args);
-        log.info("start NASControl with args: {}", liArgs);
+        log.info("start NASControl {} with args: {}", Version.getProjectVersion(), liArgs);
 
         config = ConfigUtils.loadConfiguration();
 
