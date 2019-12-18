@@ -1,26 +1,35 @@
 # NASControl
-Send a WoL (wake on lan) packet to your NAS (network attached storage) device from your mac or pc
+Send a WoL (wake on lan) packet from your mac or pc to your NAS (network attached storage) device.
 
-It integrates into the SystemTray with a tiny icon. You have to build from source yourself.
-Its written in Java and Maven.
+It integrates into the SystemTray with a tiny icon. You have to build it from source yourself. It's written in Java.
 
-## prerequisite
-Maven 3.6.2 or higher
-JDK 1.8
+## Prerequisite
+- Maven 3.6.2 or higher
+- JDK 1.8 or higher
 
-###build
+## Build
+
+```
 mvn clean package
-###run
+```
+
+## Run (for testing with log on the console)
+```
 java -jar ./target/nascontrol.jar
+```
 
-###create mac .dmg image
+## Create .dmg image for MacOS
+```
 (cd pkg;./package.sh)
+```
 
-##installation:
+## Installation:
 Create a config file in your home directory.
-
+```
 file: /Users/yourUserId/nascontrol.conf
-
+```
+```
 network.broadcast_address = 192.168.1.255
-nas.mac_address = 70:85:C2:DD:18:6F
-nas.adminui_url = http://freenas.local
+nas.mac_address = FF:A9:C9:D1:38:1F
+nas.adminui_url = http://myfreenas.local
+```
