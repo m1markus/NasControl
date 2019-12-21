@@ -35,6 +35,8 @@ file: /Users/yourUserId/nascontrol.conf
 network.broadcast_address = 192.168.1.255
 nas.mac_address = FF:A9:C9:D1:38:1F
 nas.adminui_url = http://myfreenas.local
+nas.user_id = your_nas_user
+nas.user_password = your_nas_user_comes_here
 ```
 
 2. Install the NASControl.dmg

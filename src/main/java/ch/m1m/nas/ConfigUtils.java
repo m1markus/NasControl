@@ -18,6 +18,8 @@ public class ConfigUtils {
     private static final String KEY_BROADCAST_ADDRESS = "network.broadcast_address";
     private static final String KEY_NAS_MAC_ADDRESS = "nas.mac_address";
     private static final String KEY_NAS_ADMINUI_URL = "nas.adminui_url";
+    private static final String KEY_NAS_USER_ID = "nas.user_id";
+    private static final String KEY_NAS_USER_PASSWORD = "nas.user_password";
 
     private static Logger log = LoggerFactory.getLogger(ConfigUtils.class);
 
@@ -75,5 +77,15 @@ public class ConfigUtils {
         valString = apacheConfig.getString(key);
         log.info("mapped key={} value={}", key, valString);
         config.setNasAdminUI(valString);
+
+        key = KEY_NAS_USER_ID;
+        valString = apacheConfig.getString(key);
+        log.info("mapped key={} value={}", key, valString);
+        config.setNasUserId(valString);
+
+        key = KEY_NAS_USER_PASSWORD;
+        valString = apacheConfig.getString(key);
+        log.info("mapped key={} value={}", key, valString);
+        config.setNasUserPassword(valString);
     }
 }

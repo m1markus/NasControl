@@ -1,10 +1,10 @@
 next:
-- apache commons config from home directory for mac,bcast,urlNASUI
 - about dialog with version and icon ref
 - pref dialog
 - plugin for different NAS types
-- send reboot/shutdown (update config)
+- send reboot
 - manage mount points?
+
 
 Icons
 =====
@@ -40,7 +40,7 @@ no body
 json
 no body
 
-GET http://freenas.local/api/v1.0/api/v1.0/storage/volume/
+GET http://freenas.local/api/v1.0/storage/volume/
 status
 
 [

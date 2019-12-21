@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class NASControl {
 
@@ -22,6 +23,9 @@ public class NASControl {
     private static Logger log = LoggerFactory.getLogger(NASControl.class);
 
     private static Config config;
+    private static DriverFreeNAS nasDriver;
+
+    private static int queryIntervalSeconds = 60;
 
 
     public static void main(String... args) {
@@ -32,6 +36,7 @@ public class NASControl {
         log.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), liArgs);
 
         config = ConfigUtils.loadConfiguration();
+        nasDriver = new DriverFreeNAS(config);
 
         try {
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
@@ -51,7 +56,39 @@ public class NASControl {
             System.exit(1);
         }
 
-        createAndShowGUI();
+        String iconName = "cloud-computing-gray-512x512.png";
+        createTrayIconMenue(iconName);
+
+        executeStatusLoop(config);
+    }
+
+    public static void executeStatusLoop(Config config) {
+
+        String iconName = null;
+
+        while (true) {
+
+            DriverInterface.NasStatus nasStatus = nasDriver.getStatus();
+
+            switch (nasStatus) {
+                case UNKNOWN:
+                    iconName = "cloud-computing-gray-512x512.png";
+                    break;
+                case SUCCESS:
+                    iconName = "cloud-computing-white-success-512x512.png";
+                    break;
+                default:
+                    iconName = "cloud-computing-white-error-512x512.png";
+            }
+
+            createTrayIconMenue(iconName);
+
+            try {
+                TimeUnit.SECONDS.sleep(queryIntervalSeconds);
+            } catch (InterruptedException e) {
+                log.error("sleep() interruped", e);
+            }
+        }
     }
 
     public static CommandLine setupAndParseArgs(String... args) {
@@ -87,7 +124,7 @@ public class NASControl {
         return clArgs;
     }
 
-    private static void createAndShowGUI() {
+    private static void createTrayIconMenue(String systemTrayIconName) {
         //Check the SystemTray support
         if (!SystemTray.isSupported()) {
             log.error("SystemTray is not supported");
@@ -97,37 +134,51 @@ public class NASControl {
 
         // set icons
         //
-        String imagePath = "/images/cloud-computing-gray-512x512.png";
-        //String imagePath = "/images/cloud-computing-white-512x512.png";
-        //String imagePath = "/images/cloud-computing-white-error-512x512.png";
-        //String imagePath = "/images/cloud-computing-black-512x512.png";
-        //String imagePath = "/images/cloud-computing-black-error-512x512.png";
+        String imagePath = "/images/" + systemTrayIconName;
 
         final TrayIcon trayIcon = new TrayIcon(createImage(imagePath, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
 
+        try {
+            // remove all old icons
+            //
+            TrayIcon[] oldIcons = tray.getTrayIcons();
+            int numOldIcons = oldIcons.length;
+            log.debug("actual {} old icons in the systemTray", numOldIcons);
+            for (int ii = 0; ii < numOldIcons; ii++) {
+                if (oldIcons[ii] != null) {
+                    tray.remove(oldIcons[ii]);
+                }
+            }
+
+            // set the new icon
+            //
+            tray.add(trayIcon);
+
+        } catch (AWTException e) {
+            log.error("TrayIcon could not be added");
+            System.exit(1);
+        }
+
         // Create a popup menu components
         //
         MenuItem sendWOL = new MenuItem("Send WoL");
+        MenuItem sendShutdown = new MenuItem("Send Shutdown");
         MenuItem openWebUI = new MenuItem("Open WebUI");
+
         MenuItem exitItem = new MenuItem("Exit");
 
         //sendWOL.setEnabled(false);
 
         popup.add(sendWOL);
         popup.add(openWebUI);
+        popup.addSeparator();
+        popup.add(sendShutdown);
 
         popup.addSeparator();
         popup.add(exitItem);
 
         trayIcon.setPopupMenu(popup);
-
-        try {
-            tray.add(trayIcon);
-        } catch (AWTException e) {
-            log.error("TrayIcon could not be added");
-            System.exit(1);
-        }
 
         trayIcon.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -145,6 +196,12 @@ public class NASControl {
         openWebUI.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openWebUI();
+            }
+        });
+
+        sendShutdown.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                nasDriver.shutdown();
             }
         });
 
