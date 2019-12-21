@@ -24,8 +24,9 @@ public class NASControl {
 
     private static Config config;
     private static DriverFreeNAS nasDriver;
+    private static DriverInterface.NasStatus lastNasStatus;
 
-    private static int queryIntervalSeconds = 60;
+    private static int queryIntervalSeconds = 10;
 
 
     public static void main(String... args) {
@@ -57,6 +58,7 @@ public class NASControl {
         }
 
         String iconName = "cloud-computing-gray-512x512.png";
+        lastNasStatus = DriverInterface.NasStatus.UNKNOWN;
         createTrayIconMenue(iconName);
 
         executeStatusLoop(config);
@@ -76,12 +78,18 @@ public class NASControl {
                     break;
                 case SUCCESS:
                     iconName = "cloud-computing-white-success-512x512.png";
+                    queryIntervalSeconds = 30;
                     break;
                 default:
                     iconName = "cloud-computing-white-error-512x512.png";
             }
 
-            createTrayIconMenue(iconName);
+            // update the tray icon only when needed to prevent flickering
+            //
+            if (lastNasStatus != nasStatus) {
+                createTrayIconMenue(iconName);
+                lastNasStatus = nasStatus;
+            }
 
             try {
                 TimeUnit.SECONDS.sleep(queryIntervalSeconds);
@@ -125,7 +133,6 @@ public class NASControl {
     }
 
     private static void createTrayIconMenue(String systemTrayIconName) {
-        //Check the SystemTray support
         if (!SystemTray.isSupported()) {
             log.error("SystemTray is not supported");
             System.exit(1);
