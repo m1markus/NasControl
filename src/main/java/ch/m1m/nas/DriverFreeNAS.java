@@ -78,7 +78,7 @@ public class DriverFreeNAS implements DriverInterface {
                     .post(Entity.json(null));
 
             int httpStatus = response.getStatus();
-            log.debug("response http status: {}", httpStatus);
+            log.info("response http status: {}", httpStatus);
 
         } catch (Exception e) {
             log.error("Exception in rest call", e);
