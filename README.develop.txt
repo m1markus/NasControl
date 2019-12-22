@@ -4,10 +4,6 @@ next:
 - plugin for different NAS types
 - send reboot
 - manage mount points?
-- detect mac osx dark mode:
-mue@m1m-macbook NasControl % defaults read -g AppleInterfaceStyle
-Dark
-mue@m1m-macbook NasControl
 
 
 Icons
