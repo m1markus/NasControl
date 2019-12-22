@@ -25,7 +25,7 @@ java -jar ./target/nascontrol.jar
 
 ## Installation:
 
-1. Create a config file in your home directory.
+### 1. Create a config file in your home directory.
 
 ```
 file: /Users/yourUserId/nascontrol.conf
@@ -44,9 +44,12 @@ Other names are possible too. In this order:
 - nascontrol.cfg
 
 
-2. Install the NASControl.dmg
+### 2. Install the NASControl.dmg
+```
+open pkg/NASControl.dmg
+```
 
-3. Start the application
+### 3. Start the application
 ```
 java -jar /Applications/NASControl.app/Contents/MacOS/nascontrol.jar
 ```
