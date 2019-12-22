@@ -43,12 +43,20 @@ public class DriverFreeNAS implements DriverInterface {
 
         nasUser = config.getNasUserId();
         nasUserPassword = config.getNasUserPassword();
+        if (nasUserPassword == null) nasUserPassword = "";
 
         // configure the REST client
         //
-        HttpAuthenticationFeature featureBasicAuth = HttpAuthenticationFeature.basic(nasUser, nasUserPassword);
+        HttpAuthenticationFeature featureBasicAuth = null;
+        if (nasUser != null) {
+            featureBasicAuth = HttpAuthenticationFeature.basic(nasUser, nasUserPassword);
+        }
         nasClient = ClientBuilder.newClient();
-        nasClient.register(featureBasicAuth);
+        if (featureBasicAuth != null) {
+            nasClient.register(featureBasicAuth);
+        } else {
+            log.debug("no BasicAuth feature to register");
+        }
     }
 
     @Override
