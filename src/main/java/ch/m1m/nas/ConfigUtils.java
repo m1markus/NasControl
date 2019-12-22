@@ -8,7 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 // https://commons.apache.org/proper/commons-configuration/userguide/user_guide.html
 // https://commons.apache.org/proper/commons-configuration/userguide/quick_start.html
@@ -23,37 +24,36 @@ public class ConfigUtils {
 
     private static Logger log = LoggerFactory.getLogger(ConfigUtils.class);
 
+
     public static Config loadConfiguration() {
 
-        boolean configNewCreated = false;
         Config config = new Config();
 
         File userDir = FileUtils.getUserDirectory();
         log.info("user directory: {}", userDir.toString());
 
-        String configFileName = userDir + "/nascontrol.conf";
+        List<String> fileNameList = Arrays.asList(".nascontrol.conf", "nascontrol.conf", "nascontrol.cfg");
 
         try {
 
-            File configFile = new File(configFileName);
-            if (!configFile.exists()) {
-                log.info("config file does not exist: {}", configFileName);
-                configNewCreated = configFile.createNewFile();
+            for (String fileName : fileNameList) {
 
-                if (configNewCreated) {
-                    log.info("config initialized with defaults");
+                String configFileName = userDir + "/" + fileName;
+
+                File configFile = new File(configFileName);
+                if (!configFile.exists()) {
+                    log.info("config file does not exist: {}", configFileName);
+                } else {
+                    log.info("load existing configuration from: {}", configFileName);
+                    Configurations configs = new Configurations();
+                    Configuration apacheConfig = configs.properties(new File(configFileName));
+                    mapConfigItems(apacheConfig, config);
+                    break;
                 }
-            } else {
-                log.info("load existing configuration from: {}", configFileName);
-                Configurations configs = new Configurations();
-                Configuration apacheConfig = configs.properties(new File(configFileName));
-                mapConfigItems(apacheConfig, config);
             }
 
         } catch (ConfigurationException e) {
             log.error("apache configuration failed", e);
-        } catch (IOException e) {
-            log.error("create file failed", e);
         }
 
         return config;

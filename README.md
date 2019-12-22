@@ -38,10 +38,19 @@ nas.adminui_url = http://myfreenas.local
 nas.user_id = your_nas_user
 nas.user_password = your_nas_user_password_comes_here
 ```
+Other names are possible too. In this order:
+- .nascontrol.conf
+- nascontrol.conf
+- nascontrol.cfg
+
 
 2. Install the NASControl.dmg
 
 3. Start the application
+```
+java -jar /Applications/NASControl.app/Contents/MacOS/nascontrol.jar
+```
+or
 ```
 open -a /Applications/NASControl.app
 ```
