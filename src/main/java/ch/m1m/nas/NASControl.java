@@ -25,8 +25,10 @@ public class NASControl {
     private static Config config;
     private static DriverFreeNAS nasDriver;
     private static DriverInterface.NasStatus lastNasStatus;
+    private static Platform platform;
 
     private static int queryIntervalSeconds = 10;
+    private static boolean isDarkMode;
 
 
     public static void main(String... args) {
@@ -57,8 +59,12 @@ public class NASControl {
             System.exit(1);
         }
 
-        String iconName = "cloud-computing-gray-512x512.png";
+        platform = PlatformGeneric.getInstance();
+        isDarkMode = platform.isTrayIconModeDark();
+
         lastNasStatus = DriverInterface.NasStatus.UNKNOWN;
+        String iconName = getTrayIconNameFromStatus(lastNasStatus, isDarkMode);
+
         createTrayIconMenue(iconName);
 
         executeStatusLoop(config);
@@ -66,29 +72,33 @@ public class NASControl {
 
     public static void executeStatusLoop(Config config) {
 
-        String iconName = null;
-
         while (true) {
 
-            DriverInterface.NasStatus nasStatus = nasDriver.getStatus();
+            boolean forceCreateIcon = false;
 
-            switch (nasStatus) {
-                case UNKNOWN:
-                    iconName = "cloud-computing-gray-512x512.png";
-                    break;
-                case SUCCESS:
-                    iconName = "cloud-computing-white-success-512x512.png";
-                    queryIntervalSeconds = 30;
-                    break;
-                default:
-                    iconName = "cloud-computing-white-error-512x512.png";
+            DriverInterface.NasStatus nasStatus = nasDriver.getStatus();
+            if (nasStatus == DriverInterface.NasStatus.SUCCESS) {
+                queryIntervalSeconds = 30;
             }
 
             // update the tray icon only when needed to prevent flickering
             //
             if (lastNasStatus != nasStatus) {
-                createTrayIconMenue(iconName);
                 lastNasStatus = nasStatus;
+                forceCreateIcon = true;
+            }
+
+            // update dark mode flag if changed
+            //
+            boolean isDarkModeNow = platform.isTrayIconModeDark();
+            if (isDarkModeNow != isDarkMode) {
+                isDarkMode = isDarkModeNow;
+                forceCreateIcon = true;
+            }
+
+            String iconName = getTrayIconNameFromStatus(nasStatus, isDarkMode);
+            if (forceCreateIcon) {
+                createTrayIconMenue(iconName);
             }
 
             try {
@@ -256,5 +266,23 @@ public class NASControl {
         } else {
             return (new ImageIcon(imageURL, description)).getImage();
         }
+    }
+
+    private static String getTrayIconNameFromStatus(DriverInterface.NasStatus status, boolean isDarkMode) {
+        String iconName = null;
+        switch (status) {
+            case UNKNOWN:
+                iconName = "cloud-computing-gray-512x512.png";
+                if (isDarkMode) iconName = "cloud-computing-gray-512x512.png";
+                break;
+            case SUCCESS:
+                iconName = "cloud-computing-black-success-512x512.png";
+                if (isDarkMode) iconName = "cloud-computing-white-success-512x512.png";
+                break;
+            default:
+                iconName = "cloud-computing-black-error-512x512.png";
+                if (isDarkMode) iconName = "cloud-computing-white-error-512x512.png";
+        }
+        return iconName;
     }
 }
