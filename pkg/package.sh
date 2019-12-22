@@ -13,7 +13,7 @@ if [ -f $OUTPUT_DMG_FILE ]; then
 fi
 
 # make it read/write: -format UDRW
-hdiutil create -format UDRW  -size 10m -srcfolder ${PROJECT}.app $OUTPUT_DMG_FILE
+hdiutil create -format UDRW  -size 20m -srcfolder ${PROJECT}.app $OUTPUT_DMG_FILE
 #hdiutil internet-enable -yes $OUTPUT_DMG_FILE
 
 # create the /Application link in the dmg file
