@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -8,7 +7,7 @@
     <artifactId>nascontrol</artifactId>
     <version>0.5.0-rc1</version>
 
-    <name>nascontrol</name>
+    <name>NASControl</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,6 +22,8 @@
         <jersey.version>2.25.1</jersey.version>
         <javax.json-api>1.1.4</javax.json-api>
         <applejavaextensions.version>1.4</applejavaextensions.version>
+
+        <mainClass>ch.m1m.nas.NASControl</mainClass>
     </properties>
 
     <dependencies>
@@ -111,6 +112,8 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -126,7 +129,7 @@
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ch.m1m.nas.NASControl</mainClass>
+                                    <mainClass>${mainClass}</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -153,8 +156,5 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <finalName>${project.name}</finalName>
-
     </build>
 </project>
