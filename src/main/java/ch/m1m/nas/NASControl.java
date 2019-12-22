@@ -73,7 +73,7 @@ public class NASControl {
         lastNasStatus = DriverInterface.NasStatus.UNKNOWN;
         String iconName = getTrayIconNameFromStatus(lastNasStatus, isDarkMode);
 
-        createTrayIconMenue(iconName);
+        createTrayIconMenu(iconName);
 
         executeStatusLoop(config);
     }
@@ -108,13 +108,13 @@ public class NASControl {
 
             String iconName = getTrayIconNameFromStatus(nasStatus, isDarkMode);
             if (forceCreateIcon) {
-                createTrayIconMenue(iconName);
+                createTrayIconMenu(iconName);
             }
 
             try {
                 TimeUnit.SECONDS.sleep(queryIntervalSeconds);
             } catch (InterruptedException e) {
-                log.error("sleep() interruped", e);
+                log.error("sleep() interrupted", e);
             }
         }
     }
@@ -152,7 +152,7 @@ public class NASControl {
         return clArgs;
     }
 
-    private static void createTrayIconMenue(String systemTrayIconName) {
+    private static void createTrayIconMenu(String systemTrayIconName) {
         if (!SystemTray.isSupported()) {
             log.error("SystemTray is not supported");
             System.exit(1);
@@ -260,7 +260,7 @@ public class NASControl {
         String urlNasWebUI = config.getNasAdminUI();
         String shellCommand = String.format("open %s", urlNasWebUI);
 
-        log.info("try to spawn subprocess: {}", shellCommand);
+        log.info("try to spawn sub process: {}", shellCommand);
         try {
             Runtime.getRuntime().exec(shellCommand);
         } catch (IOException e) {
