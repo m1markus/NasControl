@@ -1,5 +1,6 @@
 package ch.m1m.nas;
 
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,9 @@ public class DriverFreeNAS implements DriverInterface {
         } else {
             log.debug("no BasicAuth feature to register");
         }
+
+        nasClient.property(ClientProperties.CONNECT_TIMEOUT, 3 * 1_000);
+        nasClient.property(ClientProperties.READ_TIMEOUT,    5 * 1_000);
     }
 
     @Override
