@@ -18,6 +18,8 @@ import javax.ws.rs.core.Response;
 import java.io.StringReader;
 import java.util.ListIterator;
 
+// documentation: http://api.freenas.org/
+
 public class DriverFreeNAS implements DriverInterface {
 
     private static Logger log = LoggerFactory.getLogger(DriverFreeNAS.class);
@@ -133,6 +135,8 @@ public class DriverFreeNAS implements DriverInterface {
                         rc = NasStatus.SUCCESS;
                     } else {
                         rc = NasStatus.ERROR;
+                        log.warn("at least one Pool is unhealthy");
+                        break;
                     }
                 }
             }
