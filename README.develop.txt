@@ -2,7 +2,6 @@ next:
 - about dialog with version and icon ref
 - pref dialog
 - plugin for different NAS types
-- send reboot
 - manage mount points?
 
 
