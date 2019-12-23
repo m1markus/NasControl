@@ -1,8 +1,10 @@
 package ch.m1m.nas;
 
+import com.apple.eawt.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
 import java.util.concurrent.TimeUnit;
 
 public class PlatformOSX implements Platform {
@@ -28,5 +30,10 @@ public class PlatformOSX implements Platform {
             log.warn("falling back to default (light) mode");
             return false;
         }
+    }
+
+    @Override
+    public void setApplicationIcon(ImageIcon icon) {
+        Application.getApplication().setDockIconImage(icon.getImage());
     }
 }

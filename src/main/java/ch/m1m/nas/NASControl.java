@@ -4,11 +4,13 @@ import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +44,13 @@ public class NASControl {
         nasDriver = new DriverFreeNAS(config);
 
         try {
+            // set application icon
+            //
+            InputStream stream = nasDriver.getClass().getResourceAsStream("/images/nascontrol_icon.png");
+            ImageIcon applIcon = new ImageIcon(ImageIO.read(stream));
+            platform = PlatformGeneric.getInstance();
+            platform.setApplicationIcon(applIcon);
+
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
             log.info("system look and feel: {}", systemLookAndFeel);
 
@@ -59,7 +68,6 @@ public class NASControl {
             System.exit(1);
         }
 
-        platform = PlatformGeneric.getInstance();
         isDarkMode = platform.isTrayIconModeDark();
 
         lastNasStatus = DriverInterface.NasStatus.UNKNOWN;
