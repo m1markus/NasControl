@@ -1,6 +1,11 @@
 package ch.m1m.nas;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +16,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NASControl {
 
@@ -241,15 +250,16 @@ public class NASControl {
     }
 
     private static void sendWakeOnLan() {
-        // FIXME: make config value for MAC and Broadcast address
-        String strMacAddress = config.getMacAddress();
-        String strBroadcastAddress = config.getBroadcastAddress();
+        List<DatagramPacket> packets = Stream.of(7, 9)
+                .map(port -> WakeOnLanDatagramPacketFactory.newInstance(
+                        config.getMacAddress(), config.getBroadcastAddress(), port))
+                .collect(Collectors.toList());
 
-        log.info("sending WoL packet for MAC {} to {}", strMacAddress, strBroadcastAddress);
+        try (DatagramSocket socket = new DatagramSocket()) {
 
-        try {
-            WakeOnLan.send(strMacAddress, strBroadcastAddress, 7);
-            WakeOnLan.send(strMacAddress, strBroadcastAddress, 9);
+            for (DatagramPacket packet : packets) {
+                socket.send(packet);
+            }
 
         } catch (IOException e) {
             log.error("Failed to send WoL packet ", e);
