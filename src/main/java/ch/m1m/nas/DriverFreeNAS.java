@@ -62,7 +62,7 @@ public class DriverFreeNAS implements DriverInterface {
         }
 
         nasClient.property(ClientProperties.CONNECT_TIMEOUT, 3 * 1_000);
-        nasClient.property(ClientProperties.READ_TIMEOUT,    5 * 1_000);
+        nasClient.property(ClientProperties.READ_TIMEOUT, 5 * 1_000);
     }
 
     @Override
@@ -74,6 +74,33 @@ public class DriverFreeNAS implements DriverInterface {
         log.debug("getStatus() returns: {}", status.toString());
 
         return status;
+    }
+
+    @Override
+    public String getVersion() {
+        String version = "unknown";
+        String targetUrl = nasBaseUrl + "/system/version/";
+        log.info("making rest call to url={}", targetUrl);
+        try {
+            Response response = nasClient.target(targetUrl)
+                    .request(MediaType.APPLICATION_JSON)
+                    .get();
+
+            int httpStatus = response.getStatus();
+            log.info("response http status: {}", httpStatus);
+
+            String responseJsonString = response.readEntity(String.class);
+            log.debug("response JSON: {}", responseJsonString);
+
+            JsonReader jsonReader = Json.createReader(new StringReader(responseJsonString));
+            JsonObject jsonObject = jsonReader.readObject();
+            version = jsonObject.getString("fullversion");
+
+        } catch (Exception e) {
+            log.error("Exception in rest call", e);
+        }
+        log.debug("getVersion() returns: {}", version);
+        return version;
     }
 
     @Override

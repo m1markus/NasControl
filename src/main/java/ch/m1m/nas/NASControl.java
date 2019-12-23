@@ -84,6 +84,8 @@ public class NASControl {
 
             boolean forceCreateIcon = false;
 
+            String nasVersion = nasDriver.getVersion();
+
             DriverInterface.NasStatus nasStatus = nasDriver.getStatus();
             if (nasStatus == DriverInterface.NasStatus.SUCCESS) {
                 queryIntervalSeconds = 30;

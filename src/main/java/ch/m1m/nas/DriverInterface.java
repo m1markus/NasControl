@@ -6,5 +6,7 @@ public interface DriverInterface {
 
     public NasStatus getStatus();
 
+    public String getVersion();
+
     public void shutdown();
 }
