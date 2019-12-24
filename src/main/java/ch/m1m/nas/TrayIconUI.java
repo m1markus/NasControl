@@ -25,7 +25,7 @@ public class TrayIconUI {
 
     private final DriverFreeNAS nasDriver;
 
-    private Platform platform;
+    private final Platform platform;
 
     private DriverInterface.NasStatus lastNasStatus;
 
@@ -120,7 +120,6 @@ public class TrayIconUI {
             LOGGER.error("SystemTray is not supported");
             System.exit(1);
         }
-        final PopupMenu popup = new PopupMenu();
 
         // set icons
         //
@@ -153,31 +152,31 @@ public class TrayIconUI {
         // Create a popup menu components
         //
         MenuItem sendWOL = new MenuItem("Send WoL");
+        sendWOL.addActionListener(e -> sendWakeOnLan());
+
         MenuItem sendShutdown = new MenuItem("Send Shutdown");
+        sendShutdown.addActionListener(e -> nasDriver.shutdown());
+
         MenuItem openWebUI = new MenuItem("Open WebUI");
+        openWebUI.addActionListener(e -> openWebUI());
 
         MenuItem exitItem = new MenuItem("Exit");
+        exitItem.addActionListener(e -> {
+            tray.remove(trayIcon);
+            System.exit(0);
+        });
 
+        final PopupMenu popup = new PopupMenu();
         popup.add(sendWOL);
         popup.add(openWebUI);
         popup.addSeparator();
         popup.add(sendShutdown);
-
         popup.addSeparator();
         popup.add(exitItem);
 
         trayIcon.setPopupMenu(popup);
         trayIcon.addActionListener(e -> JOptionPane.showMessageDialog(null,
                 "This dialog box is run from System Tray"));
-
-        // Setup action listeners on menu items
-        sendWOL.addActionListener(e -> sendWakeOnLan());
-        openWebUI.addActionListener(e -> openWebUI());
-        sendShutdown.addActionListener(e -> nasDriver.shutdown());
-        exitItem.addActionListener(e -> {
-            tray.remove(trayIcon);
-            System.exit(0);
-        });
     }
 
     private void sendWakeOnLan() {
