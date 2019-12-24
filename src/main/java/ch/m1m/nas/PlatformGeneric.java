@@ -42,6 +42,7 @@ public class PlatformGeneric implements Platform {
         return isDark;
     }
 
+    @Override
     public void setApplicationIcon(ImageIcon icon) {
         if (platformSpecific != null) {
             platformSpecific.setApplicationIcon(icon);
