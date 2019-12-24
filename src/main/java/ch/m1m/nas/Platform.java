@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public interface Platform {
 
-    public boolean isTrayIconModeDark();
+    boolean isTrayIconModeDark();
 
-    public void setApplicationIcon(ImageIcon icon);
+    void setApplicationIcon(ImageIcon icon);
 }
