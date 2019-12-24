@@ -189,6 +189,7 @@ public class TrayIconUI {
         try (DatagramSocket socket = new DatagramSocket()) {
 
             for (DatagramPacket packet : packets) {
+                LOGGER.debug("send broadcast datagram packet to port={}", packet.getPort());
                 socket.send(packet);
             }
 
