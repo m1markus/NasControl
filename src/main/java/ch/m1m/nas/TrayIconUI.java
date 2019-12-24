@@ -27,13 +27,13 @@ public class TrayIconUI {
 
     private final Platform platform;
 
-    private DriverInterface.NasStatus lastNasStatus;
+    private DriverInterface.NasStatus lastNasStatus = DriverInterface.NasStatus.UNKNOWN;
 
     private int queryIntervalSeconds = 10;
 
     private boolean isDarkMode;
 
-    public TrayIconUI(Config config) {
+    public TrayIconUI(Config config, DriverFreeNAS nasDriver) {
         platform = PlatformGeneric.getInstance();
         isDarkMode = platform.isTrayIconModeDark();
 
@@ -65,8 +65,7 @@ public class TrayIconUI {
         }
 
         this.config = config;
-        lastNasStatus = DriverInterface.NasStatus.UNKNOWN;
-        nasDriver = new DriverFreeNAS(config);
+        this.nasDriver = nasDriver;
 
         String iconName = getTrayIconNameFromStatus(lastNasStatus, isDarkMode);
 

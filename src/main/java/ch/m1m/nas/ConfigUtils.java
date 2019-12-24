@@ -1,13 +1,24 @@
 package ch.m1m.nas;
 
+import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.FileBasedConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.io.ClasspathLocationStrategy;
+import org.apache.commons.configuration2.io.CombinedLocationStrategy;
+import org.apache.commons.configuration2.io.FileLocationStrategy;
+import org.apache.commons.configuration2.io.FileSystemLocationStrategy;
+import org.apache.commons.configuration2.io.HomeDirectoryLocationStrategy;
+import org.apache.commons.configuration2.io.ProvidedURLLocationStrategy;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,76 +27,94 @@ import java.util.List;
 
 public class ConfigUtils {
 
+    /**
+     * Default properties file from classpath.
+     */
+    private static final String DEFAULTS_PROPERTIES = "defaults.properties";
+
     private static final String KEY_BROADCAST_ADDRESS = "network.broadcast_address";
     private static final String KEY_NAS_MAC_ADDRESS = "nas.mac_address";
     private static final String KEY_NAS_ADMINUI_URL = "nas.adminui_url";
     private static final String KEY_NAS_USER_ID = "nas.user_id";
     private static final String KEY_NAS_USER_PASSWORD = "nas.user_password";
+    private static final String KEY_VERSION = "version";
+    private static final String KEY_PROGRAM_NAME = "program_name";
 
-    private static Logger log = LoggerFactory.getLogger(ConfigUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtils.class);
 
+    private static final List<String> CONFIG_FILE_NAMES = Arrays.asList(
+            ".nascontrol.conf",
+            "nascontrol.conf",
+            "nascontrol.cfg"
+    );
 
     public static Config loadConfiguration() {
-
-        Config config = new Config();
-
         File userDir = FileUtils.getUserDirectory();
-        log.info("user directory: {}", userDir.toString());
+        LOGGER.info("user directory: {}", userDir.toString());
 
-        List<String> fileNameList = Arrays.asList(".nascontrol.conf", "nascontrol.conf", "nascontrol.cfg");
+        File configFile = null;
+        for (String fileName : CONFIG_FILE_NAMES) {
 
-        try {
+            String configFileName = userDir + "/" + fileName;
 
-            for (String fileName : fileNameList) {
-
-                String configFileName = userDir + "/" + fileName;
-
-                File configFile = new File(configFileName);
-                if (!configFile.exists()) {
-                    log.info("config file does not exist: {}", configFileName);
-                } else {
-                    log.info("load existing configuration from: {}", configFileName);
-                    Configurations configs = new Configurations();
-                    Configuration apacheConfig = configs.properties(new File(configFileName));
-                    mapConfigItems(apacheConfig, config);
-                    break;
-                }
+            configFile = new File(configFileName);
+            if (configFile.exists()) {
+                LOGGER.info("load existing configuration from: {}", configFileName);
+                // First come, first served
+                break;
             }
-
-        } catch (ConfigurationException e) {
-            log.error("apache configuration failed", e);
         }
 
+        if (configFile == null) {
+            throw new RuntimeException("No config file found");
+        }
+
+        List<FileLocationStrategy> fileLocationStrategies = Arrays.asList(
+                new ProvidedURLLocationStrategy(),
+                new HomeDirectoryLocationStrategy(),
+                new FileSystemLocationStrategy(),
+                new ClasspathLocationStrategy());
+        FileLocationStrategy fileLocationStrategy = new CombinedLocationStrategy(fileLocationStrategies);
+
+        Parameters params = new Parameters();
+        FileBasedConfigurationBuilder<FileBasedConfiguration> builderDefaults =
+                new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+                        .configure(params.properties()
+                                .setEncoding(StandardCharsets.UTF_8.name())
+                                .setLocationStrategy(fileLocationStrategy)
+                                .setFile(new File(DEFAULTS_PROPERTIES)));
+        FileBasedConfigurationBuilder<FileBasedConfiguration> builderOther =
+                new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
+                        .configure(params.properties()
+                                .setEncoding(StandardCharsets.UTF_8.name())
+                                .setLocationStrategy(fileLocationStrategy)
+                                .setFile(configFile));
+
+        CompositeConfiguration compositeConfiguration = new CompositeConfiguration();
+        try {
+            compositeConfiguration.addConfiguration(builderDefaults.getConfiguration());
+            compositeConfiguration.addConfiguration(builderOther.getConfiguration());
+        } catch (ConfigurationException e) {
+            LOGGER.error("Apache configuration failed", e);
+        }
+
+        return mapConfigItems(compositeConfiguration, new Config());
+    }
+
+    private static Config mapConfigItems(Configuration apacheConfig, Config config) {
+        config.setBroadcastAddress(getValueFromApacheConfig(apacheConfig, KEY_BROADCAST_ADDRESS));
+        config.setMacAddress(getValueFromApacheConfig(apacheConfig, KEY_NAS_MAC_ADDRESS));
+        config.setNasAdminUI(getValueFromApacheConfig(apacheConfig, KEY_NAS_ADMINUI_URL));
+        config.setNasUserId(getValueFromApacheConfig(apacheConfig, KEY_NAS_USER_ID));
+        config.setNasUserPassword(getValueFromApacheConfig(apacheConfig, KEY_NAS_USER_PASSWORD));
+        config.setVersion(getValueFromApacheConfig(apacheConfig, KEY_VERSION));
+        config.setProgramName(getValueFromApacheConfig(apacheConfig, KEY_PROGRAM_NAME));
         return config;
     }
 
-    private static void mapConfigItems(Configuration apacheConfig, Config config) {
-        String key;
-        String valString;
-
-        key = KEY_BROADCAST_ADDRESS;
-        valString = apacheConfig.getString(key);
-        log.info("mapped key={} value={}", key, valString);
-        config.setBroadcastAddress(valString);
-
-        key = KEY_NAS_MAC_ADDRESS;
-        valString = apacheConfig.getString(key);
-        log.info("mapped key={} value={}", key, valString);
-        config.setMacAddress(valString);
-
-        key = KEY_NAS_ADMINUI_URL;
-        valString = apacheConfig.getString(key);
-        log.info("mapped key={} value={}", key, valString);
-        config.setNasAdminUI(valString);
-
-        key = KEY_NAS_USER_ID;
-        valString = apacheConfig.getString(key);
-        log.info("mapped key={} value={}", key, valString);
-        config.setNasUserId(valString);
-
-        key = KEY_NAS_USER_PASSWORD;
-        valString = apacheConfig.getString(key);
-        log.info("mapped key={} value={}", key, valString);
-        config.setNasUserPassword(valString);
+    private static String getValueFromApacheConfig(Configuration apacheConfig, String key) {
+        String value = apacheConfig.getString(key);
+        LOGGER.info("mapped key={} value={}", key, value);
+        return value;
     }
 }

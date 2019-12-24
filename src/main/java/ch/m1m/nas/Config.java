@@ -12,6 +12,9 @@ public class Config {
 
     private String nasUserPassword;
 
+    private String version;
+
+    private String programName;
 
     public String getMacAddress() {
 
@@ -57,5 +60,21 @@ public class Config {
 
     public void setNasUserPassword(String nasUserPassword) {
         this.nasUserPassword = nasUserPassword;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getProgramName() {
+        return programName;
+    }
+
+    public void setProgramName(String programName) {
+        this.programName = programName;
     }
 }

@@ -139,22 +139,54 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>templating-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>filter-src</id>
+                        <id>resource</id>
                         <goals>
-                            <goal>filter-sources</goal>
+                            <goal>resources</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${basedir}/src/main/java-templates</sourceDirectory>
-                            <outputDirectory>${project.build.directory}/generated-sources/java-templates
-                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>testResources</id>
+                        <goals>
+                            <goal>testResources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <testResource>
+                                    <directory>src/test/resources</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </testResource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <configuration>
+                    <useManifestOnlyJar>true</useManifestOnlyJar>
+                </configuration>
             </plugin>
         </plugins>
     </build>
