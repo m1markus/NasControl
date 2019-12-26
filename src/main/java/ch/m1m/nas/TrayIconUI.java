@@ -21,6 +21,8 @@ public class TrayIconUI {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrayIconUI.class);
 
+    private static ImageIcon appIcon;
+
     private final Config config;
 
     private final DriverFreeNAS nasDriver;
@@ -43,7 +45,7 @@ public class TrayIconUI {
             //
             final InputStream stream = getClass().getClassLoader().getResourceAsStream("images/nascontrol_icon.png");
             final BufferedImage image = ImageIO.read(stream);
-            ImageIcon appIcon = new ImageIcon(image);
+            appIcon = new ImageIcon(image);
             platform.setApplicationIcon(appIcon);
 
             // Setup look and feel
@@ -71,6 +73,10 @@ public class TrayIconUI {
         String iconName = getTrayIconNameFromStatus(lastNasStatus, isDarkMode);
 
         createTrayIconMenu(iconName);
+    }
+
+    public static ImageIcon getAppIcon() {
+        return appIcon;
     }
 
     public void executeStatusLoop() {
@@ -156,12 +162,17 @@ public class TrayIconUI {
         MenuItem sendShutdown = new MenuItem("Send Shutdown");
         MenuItem openWebUI = new MenuItem("Open WebUI");
 
+        MenuItem aboutItem = new MenuItem("About...");
+
         MenuItem exitItem = new MenuItem("Exit");
 
         popup.add(sendWOL);
         popup.add(openWebUI);
         popup.addSeparator();
         popup.add(sendShutdown);
+
+        popup.addSeparator();
+        popup.add(aboutItem);
 
         popup.addSeparator();
         popup.add(exitItem);
@@ -174,6 +185,9 @@ public class TrayIconUI {
         sendWOL.addActionListener(e -> sendWakeOnLan());
         openWebUI.addActionListener(e -> openWebUI());
         sendShutdown.addActionListener(e -> nasDriver.shutdown());
+
+        aboutItem.addActionListener(e -> AboutDialog.show());
+
         exitItem.addActionListener(e -> {
             tray.remove(trayIcon);
             System.exit(0);
