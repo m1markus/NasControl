@@ -1,5 +1,4 @@
 next:
-- about dialog with version and icon ref
 - pref dialog
 - plugin for different NAS types
 - manage mount points?
@@ -15,9 +14,9 @@ convert: https://www.zamzar.com/convert/png-to-gif/
 https://www.flaticon.com/free-icon/cloud-computing_1252924
 credit:
 
-<div>Icons made by
-	<a href="https://www.flaticon.com/authors/itim2101" title="itim2101">itim2101</a> from
-	<a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+<div>
+  Icons made by <a href="https://www.flaticon.com/authors/itim2101" title="itim2101">itim2101</a>
+  from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 </div>
 
 output:
