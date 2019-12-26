@@ -3,109 +3,88 @@ package ch.m1m.nas;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+
 
 public class AboutDialog {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AboutDialog.class);
 
-    private static Dialog dialog;
+    // https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
 
     private AboutDialog() {
-
     }
-/*
-    public static void show() {
-        try {
-            BufferedImage image = ImageIO.read(ImagePanel.class.getClassLoader().getResource("images/nascontrol_icon.png"));
-            JFrame frame = new JFrame();
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.add(new ImagePanel(image));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
 
-        } catch (IOException e) {
-            LOGGER.error("", e);
-        }
-    }
-*/
     public static void show() {
+
+        String programName = "NASControl";
+
         LOGGER.debug("called show()");
 
-        Frame f = new Frame();
-        dialog = new Dialog(f, "NASControl About", true);
-
-        // https://docs.oracle.com/javase/tutorial/uiswing/layout/gridbag.html
-
-        dialog.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        // place icon here
-        // ...
+        // place the icon
         //
-        //d.add( ... icon );
+        JLabel labelIcon = new JLabel(TrayIconUI.getAppIcon());
+        JPanel panelIcon = new JPanel(new GridBagLayout());
+        panelIcon.add(labelIcon);
 
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.insets = new Insets(0, 0, 0, 0);
-        dialog.add(new Label("Version:"), c);
-        c.gridx = 1;
-        c.gridy = 0;
-        c.insets = new Insets(0, 20, 0, 0);
-        dialog.add(new Label(Version.getProjectVersion()), c);
+        // program name
+        //
+        GridBagConstraints gbc = new GridBagConstraints();
+        JPanel panelProgram = new JPanel(new GridBagLayout());
+        gbc.insets = new Insets(5, 0, 0, 0);
+        panelProgram.add(new Label(programName), gbc);
 
-        c.gridx = 0;
-        c.gridy = 1;
-        c.insets = new Insets(0, 0, 0, 0);
-        dialog.add(new Label("License:"), c);
-        c.gridx = 1;
-        c.gridy = 1;
-        c.insets = new Insets(0, 20, 0, 0);
-        dialog.add(new Label("LGPL"), c);
+        // place text
+        //
+        JPanel textPanel = new JPanel(new GridBagLayout());
 
-        Button b = new Button("OK");
-        b.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                AboutDialog.dialog.setVisible(false);
-            }
-        });
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 2;
-        c.insets = new Insets(20, 0, 20, 0);
-        c.anchor = GridBagConstraints.CENTER;
-        dialog.add(b, c);
+        // Version info
+        //
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        textPanel.add(new Label("Version:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 20, 0, 0);
+        textPanel.add(new Label(Version.getProjectVersion()), gbc);
 
-        //new IconAdapter(icon);
+        // License info
+        //
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        textPanel.add(new Label("License:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 20, 0, 0);
+        textPanel.add(new Label("LGPL"), gbc);
 
-        //d.add(TrayIconUI.getAppIcon());
+        // Credit info
+        //
+        String credit1 = "Icons made by itim2101";
+        String credit2 = "from www.flaticon.com";
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        textPanel.add(new Label(credit1), gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        textPanel.add(new Label(credit2), gbc);
 
-        String creditIcons1 = "Icons made by itim2101";
-        String creditIcons2 = "from www.flaticon.com";
-
-        c.gridx = 0;
-        c.gridy = 3;
-        c.gridwidth = 2;
-        c.insets = new Insets(0, 0, 0, 0);
-        dialog.add(new Label(creditIcons1), c);
-        c.gridx = 0;
-        c.gridy = 4;
-        c.gridwidth = 2;
-        c.insets = new Insets(0, 0, 0, 0);
-        dialog.add(new Label(creditIcons2), c);
-
-        c.gridy = 5;
-        //dialog.add(TrayIconUI.getAppIcon().getImage(), c);
-
-        dialog.setSize(250, 250);
-        dialog.setVisible(true);
+        // construct dialog panel
+        //
+        JPanel panelContainer = new JPanel(new BorderLayout());
+        panelContainer.add(panelIcon, BorderLayout.NORTH);
+        panelContainer.add(panelProgram, BorderLayout.CENTER);
+        panelContainer.add(textPanel, BorderLayout.SOUTH);
+        // show dialog
+        String dialogTitle = String.format("%s About", programName);
+        JOptionPane.showMessageDialog(null, panelContainer, dialogTitle, JOptionPane.DEFAULT_OPTION);
     }
 }
