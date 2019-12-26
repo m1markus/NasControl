@@ -64,18 +64,20 @@ public class AboutDialog {
 
         // Credit info
         //
-        String credit1 = "Icons made by itim2101";
-        String credit2 = "from www.flaticon.com";
+        // https://stackoverflow.com/questions/527719/how-to-add-hyperlink-in-jlabel
+        //
+        String credit1 = "<html>Icons made by <a href=\"https://www.flaticon.com/authors/itim2101\" title=\"itim2101\">itim2101</a></html>";
+        String credit2 = "<html>from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a></html>";
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(20, 0, 0, 0);
-        textPanel.add(new Label(credit1), gbc);
+        textPanel.add(new JLabel(credit1), gbc);
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.insets = new Insets(0, 0, 0, 0);
-        textPanel.add(new Label(credit2), gbc);
+        textPanel.add(new JLabel(credit2), gbc);
 
         // construct dialog panel
         //
