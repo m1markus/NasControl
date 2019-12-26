@@ -50,10 +50,29 @@ open pkg/NASControl.dmg
 ```
 
 ### 3. Start the application
+
+#### Note: You need an installed Java 1.8 runtime
 ```
 java -jar /Applications/NASControl.app/Contents/MacOS/nascontrol.jar
 ```
-or
+If your NAS is offline...
+
+![menu offline](./Markdown/nascontrol_osx_menu_offline.png)
+
+...you can send a WOL packet... 
+
+![menu offline](./Markdown/nascontrol_osx_menu_popdown.png)
+
+...where it will hopefully show up with 'status green'.
+
+![menu offline](./Markdown/nascontrol_osx_menu_success.png)
+
+In the case of a hard disk failure, the icon becomes 'red'.
+
+![menu offline](./Markdown/nascontrol_osx_menu_error.png)
+
+
+Once everything is working as expected you can start the application with:
 ```
 open -a /Applications/NASControl.app
 ```
