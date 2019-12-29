@@ -1,5 +1,7 @@
 ![project_logo](./src/main/resources/images/nascontrol_icon.png)
 
+[![GitHub license][license-badge]](LICENSE)
+
 # NASControl
 Send a WoL (wake on lan) packet from your mac or pc to your NAS (network attached storage) device. It integrates into the SystemTray with a tiny icon. You have to build it from source yourself. It's written in Java.
 
