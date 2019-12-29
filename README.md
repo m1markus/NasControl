@@ -1,3 +1,5 @@
+![project_logo](./src/main/resources/images/nascontrol_icon.png)
+
 # NASControl
 Send a WoL (wake on lan) packet from your mac or pc to your NAS (network attached storage) device.
 
