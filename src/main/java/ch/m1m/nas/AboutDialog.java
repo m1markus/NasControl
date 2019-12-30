@@ -11,6 +11,8 @@ public class AboutDialog {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AboutDialog.class);
 
+    private static JPanel panelContainer;
+
     // https://docs.oracle.com/javase/tutorial/uiswing/layout/visual.html
 
     private AboutDialog() {
@@ -81,12 +83,19 @@ public class AboutDialog {
 
         // construct dialog panel
         //
-        JPanel panelContainer = new JPanel(new BorderLayout());
-        panelContainer.add(panelIcon, BorderLayout.NORTH);
-        panelContainer.add(panelProgram, BorderLayout.CENTER);
-        panelContainer.add(textPanel, BorderLayout.SOUTH);
+        if (panelContainer == null) {
+            panelContainer = new JPanel(new BorderLayout());
+            panelContainer.add(panelIcon, BorderLayout.NORTH);
+            panelContainer.add(panelProgram, BorderLayout.CENTER);
+            panelContainer.add(textPanel, BorderLayout.SOUTH);
+        }
+
         // show dialog
-        String dialogTitle = String.format("%s About", programName);
-        JOptionPane.showMessageDialog(null, panelContainer, dialogTitle, JOptionPane.DEFAULT_OPTION);
+        //
+        LOGGER.debug("AboutDialog isShowing() {}", panelContainer.isShowing());
+        if (!panelContainer.isShowing()) {
+            String dialogTitle = String.format("%s About", programName);
+            JOptionPane.showMessageDialog(null, panelContainer, dialogTitle, JOptionPane.DEFAULT_OPTION);
+        }
     }
 }
