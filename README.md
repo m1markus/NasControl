@@ -2,7 +2,7 @@
 
 ![license_badge](https://img.shields.io/badge/license-LGPL%202.1-green)
 
-# NASControl
+# NASControl (with Driver for TrueNAS/FreeNAS)
 Send a WoL (wake on lan) packet from your mac or pc to your NAS (network attached storage) device. It integrates into the SystemTray with a tiny icon. You have to build it from source yourself. It's written in Java.
 
 ## Prerequisite
