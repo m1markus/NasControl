@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.net.UnknownHostException;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -138,6 +139,12 @@ public class DriverFreeNAS implements DriverInterface {
                 JsonReader jsonReader = Json.createReader(new StringReader(responseJsonString));
                 JsonObject jsonObject = jsonReader.readObject();
                 version = jsonObject.getString("fullversion");
+
+// javax.ws.rs.ProcessingException: java.net.UnknownHostException: freenas.local
+// break loop when host is not found
+//
+//            } catch (UnknownHostException e) {
+//                int x = 15;
 
             } catch (Exception e) {
                 if (retryCount == 1) {

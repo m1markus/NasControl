@@ -17,6 +17,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// https://docs.oracle.com/javase/tutorial/uiswing/misc/systemtray.html
+
 public class TrayIconUI {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrayIconUI.class);
@@ -46,7 +48,8 @@ public class TrayIconUI {
             final InputStream stream = getClass().getClassLoader().getResourceAsStream("images/nascontrol_icon.png");
             final BufferedImage image = ImageIO.read(stream);
             appIcon = new ImageIcon(image);
-            platform.setApplicationIcon(appIcon);
+            // FIXME: windows mabe does not accept .png files
+            //platform.setApplicationIcon(appIcon);
 
             // Setup look and feel
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
@@ -255,6 +258,8 @@ public class TrayIconUI {
                     iconName = "cloud-computing-white-error-512x512.png";
                 }
         }
+        // windows test only
+        iconName = "bulb.gif";
         return iconName;
     }
 }
