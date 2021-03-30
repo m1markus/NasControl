@@ -27,6 +27,10 @@ public class PlatformGeneric implements Platform {
     private static void initPlatformModule() {
         if (SystemUtils.IS_OS_MAC_OSX) {
             platformSpecific = new PlatformOSX();
+
+        } else if (SystemUtils.IS_OS_WINDOWS) {
+            platformSpecific = new PlatformWindows();
+            
         } else {
             log.error("platform {} not yet implemented", SystemUtils.OS_NAME);
         }
@@ -42,6 +46,7 @@ public class PlatformGeneric implements Platform {
         return isDark;
     }
 
+    @Override
     public void setApplicationIcon(ImageIcon icon) {
         if (platformSpecific != null) {
             platformSpecific.setApplicationIcon(icon);

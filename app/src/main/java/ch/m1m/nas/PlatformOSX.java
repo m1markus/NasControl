@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class PlatformOSX implements Platform {
 
-    private static Logger log = LoggerFactory.getLogger(PlatformOSX.class);
+    private static final Logger log = LoggerFactory.getLogger(PlatformOSX.class);
 
     public PlatformOSX() {
         log.info("create instance PlatformOSX");
