@@ -1,4 +1,4 @@
-package ch.m1m.nas;
+package ch.m1m.nas.platform.api;
 
 import javax.swing.*;
 

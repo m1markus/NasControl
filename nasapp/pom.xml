@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ch.m1m.nas</groupId>
+        <artifactId>m1m-nascontrol-reactor</artifactId>
+        <version>1.0.1</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <groupId>ch.m1m.nas</groupId>
+    <artifactId>m1m-nascontrol-app</artifactId>
+    <version>1.0.1</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-naslib</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-platform-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-drivers-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-driver-truenas</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirectory>${basedir}/src/main/java-templates</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources/java-templates
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

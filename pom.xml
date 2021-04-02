@@ -4,32 +4,77 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.m1m.nas</groupId>
-    <artifactId>nascontrol-reactor</artifactId>
+    <artifactId>m1m-nascontrol-reactor</artifactId>
     <version>1.0.1</version>
 
     <packaging>pom</packaging>
-    <name>NASControl</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>9</maven.compiler.source>
-        <maven.compiler.target>9</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <slf4j.version>1.7.29</slf4j.version>
         <log4j.version>2.17.0</log4j.version>
+        <junit.version>4.13.1</junit.version>
+        <apache.commons.lang3.verson>3.12.0</apache.commons.lang3.verson>
         <apache.commons.configuration.version>2.7</apache.commons.configuration.version>
         <apache.commons.io.version>2.11.0</apache.commons.io.version>
         <apache.commons.cli.version>1.4</apache.commons.cli.version>
         <jersey.version>2.25.1</jersey.version>
         <javax.json-api>1.1.4</javax.json-api>
         <applejavaextensions.version>1.4</applejavaextensions.version>
+        <mvn.plugin.x.version></mvn.plugin.x.version>
 
         <mainClass>ch.m1m.nas.NASControl</mainClass>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>${apache.commons.cli.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${apache.commons.lang3.verson}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${apache.commons.configuration.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${apache.commons.io.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.apple</groupId>
+                <artifactId>AppleJavaExtensions</artifactId>
+                <version>${applejavaextensions.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
-        <module>platform/windows</module>
-        <module>app</module>
+        <module>drivers/api</module>
+        <module>platform/api</module>
+        <!--
+        <module>platform/windows</module>  -->
+        <module>naslib</module>
+        <module>drivers/truenas</module>
+        <module>nasapp</module>
     </modules>
 
 </project>

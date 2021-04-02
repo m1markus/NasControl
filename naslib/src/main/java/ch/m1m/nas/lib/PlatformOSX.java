@@ -1,6 +1,6 @@
-package ch.m1m.nas;
+package ch.m1m.nas.lib;
 
-import api.Platform;
+import ch.m1m.nas.platform.api.Platform;
 import com.apple.eawt.Application;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
