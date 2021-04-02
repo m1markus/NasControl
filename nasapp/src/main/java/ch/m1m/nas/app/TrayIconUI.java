@@ -1,7 +1,12 @@
-package ch.m1m.nas;
+package ch.m1m.nas.app;
 
-import api.Driver;
-import api.Platform;
+import ch.m1m.nas.driver.DriverFreeNAS;
+import ch.m1m.nas.drivers.api.Driver;
+import ch.m1m.nas.lib.Config;
+import ch.m1m.nas.lib.PlatformGeneric;
+import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
+import ch.m1m.nas.platform.api.Platform;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

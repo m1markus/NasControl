@@ -1,5 +1,7 @@
-package ch.m1m.nas;
+package ch.m1m.nas.driver;
 
+import ch.m1m.nas.drivers.api.Driver;
+import ch.m1m.nas.lib.Config;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;
@@ -17,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.net.UnknownHostException;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -35,7 +36,7 @@ import java.util.Scanner;
 // http://freenas.local/api/v2.0/alert/list
 // http://freenas.local/api/v2.0/disk
 //
-public class DriverFreeNAS implements DriverInterface {
+public class DriverFreeNAS implements Driver {
 
     private static Logger log = LoggerFactory.getLogger(DriverFreeNAS.class);
 

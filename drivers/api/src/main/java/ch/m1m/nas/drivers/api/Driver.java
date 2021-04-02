@@ -1,6 +1,6 @@
-package ch.m1m.nas;
+package ch.m1m.nas.drivers.api;
 
-public interface DriverInterface {
+public interface Driver {
 
     enum NasStatus {SUCCESS, ERROR, UNKNOWN}
 
