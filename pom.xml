@@ -66,12 +66,12 @@
     </dependencyManagement>
 
     <modules>
-        <module>drivers/api</module>
+        <module>driver/api</module>
         <module>platform/api</module>
         <module>platform/windows</module>
         <module>platform/osx</module>
         <module>naslib</module>
-        <module>drivers/truenas</module>
+        <module>driver/truenas</module>
         <module>nasapp</module>
     </modules>
 
