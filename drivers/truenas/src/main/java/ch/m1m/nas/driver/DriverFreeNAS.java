@@ -1,6 +1,6 @@
 package ch.m1m.nas.driver;
 
-import ch.m1m.nas.drivers.api.Driver;
+import ch.m1m.nas.driver.api.Driver;
 import ch.m1m.nas.lib.Config;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
