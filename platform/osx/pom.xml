@@ -10,7 +10,7 @@
         <relativePath>../../</relativePath>
     </parent>
 
-    <artifactId>m1m-nascontrol-plugin-windows</artifactId>
+    <artifactId>m1m-nascontrol-plugin-osx</artifactId>
     <version>1.0.1</version>
 
     <dependencies>
@@ -23,6 +23,11 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.apple</groupId>
+            <artifactId>AppleJavaExtensions</artifactId>
         </dependency>
     </dependencies>
 

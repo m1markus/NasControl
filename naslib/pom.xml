@@ -10,7 +10,6 @@
         <relativePath>../</relativePath>
     </parent>
 
-    <groupId>ch.m1m.nas</groupId>
     <artifactId>m1m-nascontrol-naslib</artifactId>
     <version>1.0.1</version>
 
@@ -18,6 +17,16 @@
         <dependency>
             <groupId>ch.m1m.nas</groupId>
             <artifactId>m1m-nascontrol-platform-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-plugin-osx</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-plugin-windows</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -46,11 +55,6 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.apple</groupId>
-            <artifactId>AppleJavaExtensions</artifactId>
         </dependency>
     </dependencies>
 

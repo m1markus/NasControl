@@ -68,8 +68,8 @@
     <modules>
         <module>drivers/api</module>
         <module>platform/api</module>
-        <!--
-        <module>platform/windows</module>  -->
+        <module>platform/windows</module>
+        <module>platform/osx</module>
         <module>naslib</module>
         <module>drivers/truenas</module>
         <module>nasapp</module>
