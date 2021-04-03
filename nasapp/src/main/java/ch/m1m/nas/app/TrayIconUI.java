@@ -1,7 +1,7 @@
 package ch.m1m.nas.app;
 
 import ch.m1m.nas.driver.DriverFreeNAS;
-import ch.m1m.nas.drivers.api.Driver;
+import ch.m1m.nas.driver.api.Driver;
 import ch.m1m.nas.lib.Config;
 import ch.m1m.nas.lib.PlatformFactory;
 import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;

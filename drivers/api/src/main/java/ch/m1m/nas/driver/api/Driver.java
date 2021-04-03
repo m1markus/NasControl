@@ -1,4 +1,4 @@
-package ch.m1m.nas.drivers.api;
+package ch.m1m.nas.driver.api;
 
 public interface Driver {
 
