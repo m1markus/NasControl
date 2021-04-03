@@ -3,7 +3,7 @@ package ch.m1m.nas.app;
 import ch.m1m.nas.driver.DriverFreeNAS;
 import ch.m1m.nas.drivers.api.Driver;
 import ch.m1m.nas.lib.Config;
-import ch.m1m.nas.lib.PlatformGeneric;
+import ch.m1m.nas.lib.PlatformFactory;
 import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
 import ch.m1m.nas.platform.api.Platform;
 
@@ -45,7 +45,7 @@ public class TrayIconUI {
     private boolean isDarkMode;
 
     public TrayIconUI(Config config) {
-        platform = PlatformGeneric.getInstance();
+        platform = PlatformFactory.getInstance();
         isDarkMode = platform.isTrayIconModeDark();
 
         try {

@@ -1,4 +1,4 @@
-package ch.m1m.nas.lib;
+package ch.m1m.nas.platform;
 
 import ch.m1m.nas.platform.api.Platform;
 import com.apple.eawt.Application;
@@ -24,7 +24,7 @@ public class PlatformOSX implements Platform {
         try {
             // check for exit status only. Once there are more modes than "Dark" and "default", we might need to analyze string contents..
             final Process proc = Runtime.getRuntime().exec(new String[]{"defaults", "read", "-g", "AppleInterfaceStyle"});
-            proc.waitFor(100, TimeUnit.MILLISECONDS);
+            proc.waitFor(500, TimeUnit.MILLISECONDS);
             return proc.exitValue() == 0;
         } catch (Exception e) {
             // IllegalThreadStateException thrown by proc.exitValue(), if process didn't terminate

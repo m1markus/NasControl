@@ -1,4 +1,4 @@
-package ch.m1m.nas.lib;
+package ch.m1m.nas.platform;
 
 import ch.m1m.nas.platform.api.Platform;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class PlatformWindows implements Platform {
 
     @Override
     public boolean isTrayIconModeDark() {
-        return false;
+        return true;
     }
 
     @Override

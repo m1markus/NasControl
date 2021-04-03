@@ -10,7 +10,6 @@
         <relativePath>../</relativePath>
     </parent>
 
-    <groupId>ch.m1m.nas</groupId>
     <artifactId>m1m-nascontrol-app</artifactId>
     <version>1.0.1</version>
 
