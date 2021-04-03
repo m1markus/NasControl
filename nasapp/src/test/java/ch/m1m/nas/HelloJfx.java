@@ -1,4 +1,7 @@
 package ch.m1m.nas;
+public class HelloJfx {}
+
+/*
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -32,3 +35,4 @@ public class HelloJfx extends Application {
         primaryStage.show();
     }
 }
+*/
