@@ -65,6 +65,14 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                
+            </plugins>
+        </pluginManagement>
+    </build>
+
     <modules>
         <module>driver/api</module>
         <module>platform/api</module>
