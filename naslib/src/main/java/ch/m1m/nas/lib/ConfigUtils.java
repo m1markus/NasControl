@@ -1,5 +1,6 @@
 package ch.m1m.nas.lib;
 
+import ch.m1m.nas.driver.api.Driver;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -21,6 +22,7 @@ public class ConfigUtils {
     private static final String KEY_NAS_ADMINUI_URL = "nas.adminui_url";
     private static final String KEY_NAS_USER_ID = "nas.user_id";
     private static final String KEY_NAS_USER_PASSWORD = "nas.user_password";
+    private static final String KEY_NAS_STATUS_FORCE = "nas.status.force";
 
     private static Logger log = LoggerFactory.getLogger(ConfigUtils.class);
 
@@ -87,5 +89,17 @@ public class ConfigUtils {
         valString = apacheConfig.getString(key);
         log.info("mapped key={} value={}", key, valString);
         config.setNasUserPassword(valString);
+
+        key = KEY_NAS_STATUS_FORCE;
+        valString = apacheConfig.getString(key);
+        Driver.NasStatus forcedStatus;
+        try {
+            forcedStatus = Driver.NasStatus.valueOf(valString);
+        } catch (Exception e) {
+            log.warn("catched exception while mapping key {}", key, e);
+            forcedStatus = Driver.NasStatus.UNKNOWN;
+        }
+        log.info("mapped key={} value={}", key, forcedStatus);
+        config.setNasForcedStatus(forcedStatus);
     }
 }
