@@ -12,13 +12,13 @@ import javax.swing.*;
 
 public class PlatformWindows implements Platform {
 
-    private static final Logger log = LoggerFactory.getLogger(PlatformWindows.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PlatformWindows.class);
 
     public PlatformWindows() {
         String regTreeKey = "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
         String productName = WindowsReqistry.readRegistry(regTreeKey, "ProductName");
         String displayVersion = WindowsReqistry.readRegistry(regTreeKey, "DisplayVersion");
-        log.info("create instance PlatformWindows: {} {}", productName, displayVersion);
+        LOG.info("create instance PlatformWindows: {} {}", productName, displayVersion);
     }
 
     @Override
@@ -37,6 +37,7 @@ public class PlatformWindows implements Platform {
                 isDarkMode = true;
             }
         }
+        LOG.info("isTrayIconModeDark() returns {}", isDarkMode);
         return isDarkMode;
     }
 
