@@ -37,4 +37,9 @@ public class PlatformOSX implements Platform {
     public void setApplicationIcon(ImageIcon icon) {
         Application.getApplication().setDockIconImage(icon.getImage());
     }
+
+    @Override
+    public String getShellCommandDisplayURL(String url) {
+        return String.format("open %s", url);
+    }
 }
