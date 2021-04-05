@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import javax.swing.*;
 
 // https://github.com/dustinkredmond/FXTrayIcon
-
 // http://www-inf.int-evry.fr/cours/java/javatutorial/uiswing/misc/systemtray.html
+// https://stackoverflow.com/questions/60837862/detect-dark-windows-taskbar
 
 public class PlatformWindows implements Platform {
 
@@ -45,5 +45,10 @@ public class PlatformWindows implements Platform {
     public void setApplicationIcon(ImageIcon icon) {
         //Taskbar taskbar = Taskbar.getTaskbar();
         //taskbar.setIconImage(icon.getImage());
+    }
+
+    @Override
+    public String getShellCommandDisplayURL(String url) {
+        return String.format("start %s", url);
     }
 }

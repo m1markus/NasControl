@@ -7,4 +7,6 @@ public interface Platform {
     public boolean isTrayIconModeDark();
 
     public void setApplicationIcon(ImageIcon icon);
+
+    public String getShellCommandDisplayURL(String urlNasWebUI);
 }
