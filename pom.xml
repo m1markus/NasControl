@@ -61,7 +61,6 @@
                 <artifactId>AppleJavaExtensions</artifactId>
                 <version>${applejavaextensions.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
