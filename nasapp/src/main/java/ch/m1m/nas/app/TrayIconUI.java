@@ -36,7 +36,7 @@ public class TrayIconUI {
 
     private final DriverFreeNAS nasDriver;
 
-    private Platform platform;
+    private final Platform platform;
 
     private Driver.NasStatus lastNasStatus;
 
@@ -95,11 +95,15 @@ public class TrayIconUI {
 
             boolean forceCreateIcon = false;
 
-            String nasVersion = nasDriver.getVersion();
+            Driver.NasStatus nasStatus = config.getNasForcedStatus();
+            if (nasStatus != Driver.NasStatus.UNKNOWN) {
+                LOGGER.warn("Skip calling NAS status because of forced config status {}", nasStatus);
 
-            Driver.NasStatus nasStatus = nasDriver.getStatus();
-            if (nasStatus == Driver.NasStatus.SUCCESS) {
-                queryIntervalSeconds = 30;
+            } else {
+                nasStatus = nasDriver.getStatus();
+                if (nasStatus == Driver.NasStatus.SUCCESS) {
+                    queryIntervalSeconds = 30;
+                }
             }
 
             // update the tray icon only when needed to prevent flickering
