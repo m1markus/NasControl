@@ -15,12 +15,29 @@ public class PlatformWindows implements Platform {
     private static final Logger log = LoggerFactory.getLogger(PlatformWindows.class);
 
     public PlatformWindows() {
-        log.info("create instance PlatformWindows");
+        String regTreeKey = "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion";
+        String productName = WindowsReqistry.readRegistry(regTreeKey, "ProductName");
+        String displayVersion = WindowsReqistry.readRegistry(regTreeKey, "DisplayVersion");
+        log.info("create instance PlatformWindows: {} {}", productName, displayVersion);
     }
 
     @Override
     public boolean isTrayIconModeDark() {
-        return true;
+        boolean isDarkMode = false;
+        String regTreeKey = "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize";
+
+        // FIXME: This is not the fastest method to query the windows registry
+        //
+        String valueThemeLight = WindowsReqistry.readRegistry(regTreeKey, "SystemUsesLightTheme");
+        if (valueThemeLight != null) {
+            // if DarkTheme is activated the output is: SystemUsesLightTheme 0x0
+            //
+            valueThemeLight = valueThemeLight.toLowerCase();
+            if ("0x0".equals(valueThemeLight)) {
+                isDarkMode = true;
+            }
+        }
+        return isDarkMode;
     }
 
     @Override
