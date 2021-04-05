@@ -21,6 +21,11 @@
         </dependency>
         <dependency>
             <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-drivers-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
             <artifactId>m1m-nascontrol-plugin-osx</artifactId>
             <version>${project.version}</version>
         </dependency>

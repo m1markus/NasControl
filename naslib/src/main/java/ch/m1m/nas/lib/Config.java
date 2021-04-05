@@ -1,5 +1,7 @@
 package ch.m1m.nas.lib;
 
+import ch.m1m.nas.driver.api.Driver;
+
 public class Config {
 
     private String macAddress;
@@ -11,6 +13,8 @@ public class Config {
     private String nasUserId;
 
     private String nasUserPassword;
+
+    private Driver.NasStatus nasForcedStatus = Driver.NasStatus.UNKNOWN;
 
 
     public String getMacAddress() {
@@ -57,5 +61,13 @@ public class Config {
 
     public void setNasUserPassword(String nasUserPassword) {
         this.nasUserPassword = nasUserPassword;
+    }
+
+    public Driver.NasStatus getNasForcedStatus() {
+        return nasForcedStatus;
+    }
+
+    public void setNasForcedStatus(Driver.NasStatus nasForcedStatus) {
+        this.nasForcedStatus = nasForcedStatus;
     }
 }
