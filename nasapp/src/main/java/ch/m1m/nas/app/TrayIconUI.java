@@ -28,20 +28,15 @@ import java.util.stream.Stream;
 
 public class TrayIconUI {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrayIconUI.class);
-
+    private static final Logger LOG = LoggerFactory.getLogger(TrayIconUI.class);
     private static ImageIcon appIcon;
 
     private final Config config;
-
     private final DriverFreeNAS nasDriver;
-
     private final Platform platform;
 
     private Driver.NasStatus lastNasStatus;
-
     private int queryIntervalSeconds = 10;
-
     private boolean isDarkMode;
 
     public TrayIconUI(Config config) {
@@ -60,11 +55,11 @@ public class TrayIconUI {
 
             // Setup look and feel
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
-            LOGGER.info("system look and feel: {}", systemLookAndFeel);
+            LOG.info("system look and feel: {}", systemLookAndFeel);
 
             if (systemLookAndFeel == null) {
                 systemLookAndFeel = "javax.swing.plaf.metal.MetalLookAndFeel";
-                LOGGER.info("changed look and feel to: {}", systemLookAndFeel);
+                LOG.info("changed look and feel to: {}", systemLookAndFeel);
             }
 
             UIManager.setLookAndFeel(systemLookAndFeel);
@@ -72,7 +67,7 @@ public class TrayIconUI {
             UIManager.put("swing.boldMetal", Boolean.FALSE);
 
         } catch (Exception e) {
-            LOGGER.error("Something went wrong", e);
+            LOG.error("Something went wrong", e);
             System.exit(1);
         }
 
@@ -97,7 +92,7 @@ public class TrayIconUI {
 
             Driver.NasStatus nasStatus = config.getNasForcedStatus();
             if (nasStatus != Driver.NasStatus.UNKNOWN) {
-                LOGGER.warn("Skip calling NAS status because of forced config status {}", nasStatus);
+                LOG.warn("Skip calling NAS status because of forced config status {}", nasStatus);
 
             } else {
                 nasStatus = nasDriver.getStatus();
@@ -129,7 +124,7 @@ public class TrayIconUI {
             try {
                 TimeUnit.SECONDS.sleep(queryIntervalSeconds);
             } catch (InterruptedException e) {
-                LOGGER.error("sleep() interrupted", e);
+                LOG.error("sleep() interrupted", e);
                 Thread.currentThread().interrupt();
             }
         }
@@ -137,7 +132,7 @@ public class TrayIconUI {
 
     private void createTrayIconMenu(String systemTrayIconName) {
         if (!SystemTray.isSupported()) {
-            LOGGER.error("SystemTray is not supported");
+            LOG.error("SystemTray is not supported");
             System.exit(1);
         }
         final PopupMenu popup = new PopupMenu();
@@ -154,7 +149,7 @@ public class TrayIconUI {
             //
             TrayIcon[] oldIcons = tray.getTrayIcons();
             int numOldIcons = oldIcons.length;
-            LOGGER.debug("actual {} old icons in the systemTray", numOldIcons);
+            LOG.debug("actual {} old icons in the systemTray", numOldIcons);
             for (int ii = 0; ii < numOldIcons; ii++) {
                 if (oldIcons[ii] != null) {
                     tray.remove(oldIcons[ii]);
@@ -166,7 +161,7 @@ public class TrayIconUI {
             tray.add(trayIcon);
 
         } catch (AWTException e) {
-            LOGGER.error("TrayIcon could not be added");
+            LOG.error("TrayIcon could not be added");
             System.exit(1);
         }
 
@@ -217,31 +212,31 @@ public class TrayIconUI {
         try (DatagramSocket socket = new DatagramSocket()) {
 
             for (DatagramPacket packet : packets) {
-                LOGGER.debug("send broadcast datagram packet to port={}", packet.getPort());
+                LOG.debug("send broadcast datagram packet to port={}", packet.getPort());
                 socket.send(packet);
             }
 
         } catch (IOException e) {
-            LOGGER.error("Failed to send WoL packet ", e);
+            LOG.error("Failed to send WoL packet ", e);
         }
     }
 
     private void openWebUI() {
         String urlNasWebUI = config.getNasAdminUI();
-        String shellCommand = String.format("open %s", urlNasWebUI);
+        String shellCommand = platform.getShellCommandDisplayURL(urlNasWebUI);
 
-        LOGGER.info("try to spawn sub process: {}", shellCommand);
+        LOG.info("try to spawn sub process: {}", shellCommand);
         try {
             Runtime.getRuntime().exec(shellCommand);
         } catch (IOException e) {
-            LOGGER.error("Failed to spawn browser", e);
+            LOG.error("Failed to spawn browser", e);
         }
     }
 
     private Image createImage(String path, String description) {
         URL imageURL = getClass().getResource(path);
         if (imageURL == null) {
-            LOGGER.error("Resource not found: {}", path);
+            LOG.error("Resource not found: {}", path);
             return null;
         } else {
             return (new ImageIcon(imageURL, description)).getImage();
