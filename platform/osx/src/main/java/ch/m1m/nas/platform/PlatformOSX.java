@@ -10,10 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 public class PlatformOSX implements Platform {
 
-    private static final Logger log = LoggerFactory.getLogger(PlatformOSX.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PlatformOSX.class);
 
     public PlatformOSX() {
-        log.info("create instance PlatformOSX");
+        LOG.info("create instance PlatformOSX");
     }
 
     /* run: defaults read -g AppleInterfaceStyle
@@ -28,7 +28,7 @@ public class PlatformOSX implements Platform {
             return proc.exitValue() == 0;
         } catch (Exception e) {
             // IllegalThreadStateException thrown by proc.exitValue(), if process didn't terminate
-            log.warn("falling back to default (light) mode");
+            LOG.warn("falling back to default (light) mode");
             return false;
         }
     }
