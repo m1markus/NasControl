@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class AboutDialog {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AboutDialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AboutDialog.class);
 
     private static JPanel panelContainer;
 
@@ -22,7 +22,7 @@ public class AboutDialog {
 
         String programName = "NASControl";
 
-        LOGGER.debug("called show()");
+        LOG.debug("called show()");
 
         // place the icon
         //
@@ -92,7 +92,7 @@ public class AboutDialog {
 
         // show dialog
         //
-        LOGGER.debug("AboutDialog isShowing() {}", panelContainer.isShowing());
+        LOG.debug("AboutDialog isShowing() {}", panelContainer.isShowing());
         if (!panelContainer.isShowing()) {
             String dialogTitle = String.format("%s About", programName);
             JOptionPane.showMessageDialog(null, panelContainer, dialogTitle, JOptionPane.DEFAULT_OPTION);

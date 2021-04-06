@@ -16,12 +16,12 @@ public class NASControl {
     private static final String OPT_HELP = "help";
     private static final String OPT_VERSION = "version";
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NASControl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NASControl.class);
 
     public static void main(String... args) {
 
         CommandLine clArgs = setupAndParseArgs(args);
-        LOGGER.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), clArgs.getArgList());
+        LOG.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), clArgs.getArgList());
 
         Config config = ConfigUtils.loadConfiguration();
 
@@ -49,12 +49,12 @@ public class NASControl {
             }
 
             if (clArgs.hasOption(OPT_VERSION)) {
-                LOGGER.info(PROGRAM_NAME + " version " + Version.getProjectVersion());
+                LOG.info(PROGRAM_NAME + " version " + Version.getProjectVersion());
                 System.exit(0);
             }
 
         } catch (ParseException e) {
-            LOGGER.error("parsing command line: {}", e.getMessage());
+            LOG.error("parsing command line: {}", e.getMessage());
             System.exit(1);
         }
 
