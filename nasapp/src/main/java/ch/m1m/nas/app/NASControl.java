@@ -24,9 +24,7 @@ public class NASControl {
     public static void main(String... args) {
 
         CommandLine clArgs = setupAndParseArgs(args);
-
-        List<String> liArgs = Arrays.asList(args);
-        LOGGER.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), liArgs);
+        LOGGER.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), clArgs.getArgList());
 
         Config config = ConfigUtils.loadConfiguration();
 
