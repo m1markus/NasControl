@@ -96,7 +96,11 @@ public class ConfigUtils {
         try {
             forcedStatus = Driver.NasStatus.valueOf(valString);
         } catch (Exception e) {
-            log.warn("catched exception while mapping key {}", key, e);
+            if (e instanceof NullPointerException) {
+                // this is expected when no value is configured
+            } else {
+                log.warn("catched exception while mapping key {}", key, e);
+            }
             forcedStatus = Driver.NasStatus.UNKNOWN;
         }
         log.info("mapped key={} value={}", key, forcedStatus);
