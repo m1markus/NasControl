@@ -6,9 +6,6 @@ import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
-
 // https://phrase.com/blog/posts/a-beginners-guide-to-java-internationalization/
 //
 // https://github.com/dustinkredmond/FXTrayIcon/blob/main/src/test/java/com/dustinredmond/fxtrayicon/RunnableTest.java
