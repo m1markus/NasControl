@@ -10,7 +10,7 @@
         <relativePath>../../</relativePath>
     </parent>
 
-    <artifactId>m1m-nascontrol-plugin-windows</artifactId>
+    <artifactId>m1m-nascontrol-platform-windows</artifactId>
     <version>1.0.1</version>
 
     <dependencies>

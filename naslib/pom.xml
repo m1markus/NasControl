@@ -26,12 +26,12 @@
         </dependency>
         <dependency>
             <groupId>ch.m1m.nas</groupId>
-            <artifactId>m1m-nascontrol-plugin-osx</artifactId>
+            <artifactId>m1m-nascontrol-platform-osx</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.m1m.nas</groupId>
-            <artifactId>m1m-nascontrol-plugin-windows</artifactId>
+            <artifactId>m1m-nascontrol-platform-windows</artifactId>
             <version>${project.version}</version>
         </dependency>
 
