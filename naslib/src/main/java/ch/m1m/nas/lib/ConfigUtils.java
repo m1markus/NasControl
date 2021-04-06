@@ -25,7 +25,7 @@ public class ConfigUtils {
     private static final String KEY_NAS_STATUS_FORCE = "nas.status.force";
 
     private static Logger log = LoggerFactory.getLogger(ConfigUtils.class);
-    
+
     public static Config loadConfiguration() {
 
         Config config = new Config();
