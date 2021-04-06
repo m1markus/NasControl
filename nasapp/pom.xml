@@ -14,7 +14,7 @@
     <version>1.0.1</version>
 
     <properties>
-        <mainClass>ch.m1m.nas.app.NASControl</mainClass>
+        <mainClass>ch.m1m.nas.app.FatJarFXStarter</mainClass>
     </properties>
 
     <dependencies>
@@ -38,6 +38,32 @@
             <artifactId>m1m-nascontrol-driver-truenas</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>16</version>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>16</version>
+            <classifier>win</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>16</version>
+            <classifier>linux</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>16</version>
+            <classifier>mac</classifier>
+        </dependency>
+        -->
     </dependencies>
 
     <build>
