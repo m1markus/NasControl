@@ -2,6 +2,11 @@ package ch.m1m.nas.app;
 
 import ch.m1m.nas.lib.Config;
 import ch.m1m.nas.lib.ConfigUtils;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import org.apache.commons.cli.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +15,7 @@ import org.slf4j.LoggerFactory;
 //
 // https://github.com/dustinkredmond/FXTrayIcon/blob/main/src/test/java/com/dustinredmond/fxtrayicon/RunnableTest.java
 
-public class NASControl {
-
+public class NASControl extends Application {
     private static final String PROGRAM_NAME = "NASControl";
     private static final String OPT_HELP = "help";
     private static final String OPT_VERSION = "version";
@@ -19,14 +23,34 @@ public class NASControl {
     private static final Logger LOG = LoggerFactory.getLogger(NASControl.class);
 
     public static void main(String... args) {
-
         CommandLine clArgs = setupAndParseArgs(args);
         LOG.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), clArgs.getArgList());
 
+        launch();
+    }
+
+    @Override
+    public void start(Stage stage) {
         Config config = ConfigUtils.loadConfiguration();
 
-        TrayIconUI trayIconUI = new TrayIconUI(config);
-        trayIconUI.executeStatusLoop();
+        // begin UI
+        //
+        var javaVersion = "x.0";
+        var javafxVersion = "y.0";
+        var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+        var scene = new Scene(new StackPane(label), 640, 480);
+        stage.setScene(scene);
+        stage.show();
+        //
+        // end UI
+
+        //Thread
+        Thread backgroundThread = new Thread(() -> {
+            TrayIconUI trayIconUI = new TrayIconUI(config);
+            trayIconUI.executeStatusLoop();
+        });
+        backgroundThread.setDaemon(true);
+        backgroundThread.start();
     }
 
     public static CommandLine setupAndParseArgs(String... args) {
