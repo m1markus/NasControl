@@ -7,6 +7,7 @@ import ch.m1m.nas.lib.PlatformFactory;
 import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
 import ch.m1m.nas.platform.api.Platform;
 
+import com.dustinredmond.fxtrayicon.FXTrayIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ public class TrayIconUI {
             final InputStream stream = getClass().getClassLoader().getResourceAsStream("images/nascontrol_icon.png");
             final BufferedImage image = ImageIO.read(stream);
             appIcon = new ImageIcon(image);
-            // FIXME: windows mabe does not accept .png files
+            // FIXME: windows maybe does not accept .png files
             //platform.setApplicationIcon(appIcon);
 
             // Setup look and feel
@@ -76,7 +77,6 @@ public class TrayIconUI {
         nasDriver = new DriverFreeNAS(config);
 
         String iconName = getTrayIconNameFromStatus(lastNasStatus, isDarkMode);
-
         createTrayIconMenu(iconName);
     }
 
@@ -130,7 +130,41 @@ public class TrayIconUI {
         }
     }
 
+    private void createTrayIconMenuWindows(String systemTrayIconName) {
+
+        FXTrayIcon trayIcon = new FXTrayIcon(NASControl.getUiStage(), getClass().getResource("/images/cloud-computing-gray-512x512.png"));
+        trayIcon.clear();
+        trayIcon.addExitItem(false);
+
+        javafx.scene.control.MenuItem menuItemOptionsExit = new javafx.scene.control.MenuItem("myOptions");
+        menuItemOptionsExit.setOnAction(e -> {
+            System.out.println("selected options menu");
+        });
+        trayIcon.addMenuItem(menuItemOptionsExit);
+
+        trayIcon.addSeparator();
+
+        javafx.scene.control.MenuItem menuItemExit = new javafx.scene.control.MenuItem("myExit");
+        menuItemExit.setOnAction(e -> {
+            System.out.println("calling exit(0)");
+            trayIcon.hide();
+            System.exit(0);
+        });
+        trayIcon.addMenuItem(menuItemExit);
+
+        //trayIcon.showErrorMessage("this is my error");
+
+        trayIcon.setTrayIconTooltip("Your NAS ist not connected");
+        trayIcon.show();
+        // delete default menu entry
+        trayIcon.removeMenuItem(0);
+    }
+
     private void createTrayIconMenu(String systemTrayIconName) {
+        createTrayIconMenuWindows(systemTrayIconName);
+    }
+
+    private void createTrayIconMenuOSX(String systemTrayIconName) {
         if (!SystemTray.isSupported()) {
             LOG.error("SystemTray is not supported");
             System.exit(1);
@@ -149,7 +183,7 @@ public class TrayIconUI {
             //
             TrayIcon[] oldIcons = tray.getTrayIcons();
             int numOldIcons = oldIcons.length;
-            LOG.debug("actual {} old icons in the systemTray", numOldIcons);
+            LOG.info("actual {} old icons in the systemTray", numOldIcons);
             for (int ii = 0; ii < numOldIcons; ii++) {
                 if (oldIcons[ii] != null) {
                     tray.remove(oldIcons[ii]);
