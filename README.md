@@ -39,6 +39,9 @@ nas.mac_address = FF:A9:C9:D1:38:1F
 nas.adminui_url = http://myfreenas.local
 nas.user_id = your_nas_user
 nas.user_password = your_nas_user_password_comes_here
+
+# to test the icon one of: SUCCESS, ERROR, UNKNOWN
+# nas.status.force = ERROR
 ```
 Other names are possible too. In this order:
 - .nascontrol.conf
