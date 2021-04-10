@@ -44,6 +44,10 @@
             <artifactId>javafx-controls</artifactId>
             <version>16</version>
         </dependency>
+        <dependency>
+            <groupId>com.dustinredmond.fxtrayicon</groupId>
+            <artifactId>FXTrayIcon</artifactId>
+        </dependency>
         <!--
         <dependency>
             <groupId>org.openjfx</groupId>

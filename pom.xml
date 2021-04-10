@@ -57,6 +57,11 @@
             </dependency>
 
             <dependency>
+                <groupId>com.dustinredmond.fxtrayicon</groupId>
+                <artifactId>FXTrayIcon</artifactId>
+                <version>2.7.2</version>
+            </dependency>
+            <dependency>
                 <groupId>com.apple</groupId>
                 <artifactId>AppleJavaExtensions</artifactId>
                 <version>${applejavaextensions.version}</version>
