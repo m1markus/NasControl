@@ -21,6 +21,7 @@ public class NASControl extends Application {
     private static final String OPT_VERSION = "version";
 
     private static final Logger LOG = LoggerFactory.getLogger(NASControl.class);
+    private static Stage stage;
 
     public static void main(String... args) {
         CommandLine clArgs = setupAndParseArgs(args);
@@ -29,8 +30,15 @@ public class NASControl extends Application {
         launch();
     }
 
+    public static Stage getUiStage() {
+
+        return stage;
+    }
+
     @Override
-    public void start(Stage stage) {
+    public void start(Stage inStage) {
+
+        stage = inStage;
         Config config = ConfigUtils.loadConfiguration();
 
         // begin UI
@@ -40,13 +48,14 @@ public class NASControl extends Application {
         var label = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
         var scene = new Scene(new StackPane(label), 640, 480);
         stage.setScene(scene);
-        stage.show();
+        //stage.show();
         //
         // end UI
 
+        TrayIconUI trayIconUI = new TrayIconUI(config);
+
         //Thread
         Thread backgroundThread = new Thread(() -> {
-            TrayIconUI trayIconUI = new TrayIconUI(config);
             trayIconUI.executeStatusLoop();
         });
         backgroundThread.setDaemon(true);
