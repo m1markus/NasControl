@@ -49,6 +49,30 @@ public class PlatformWindows implements Platform {
 
     @Override
     public String getShellCommandDisplayURL(String url) {
-        return String.format("start %s", url);
+        
+        //return String.format("start %s", url);
+        return String.format("cmd \"/c start %s\"", url);
+        
+        /* this is C# code !!!
+        
+        // hack because of this: https://github.com/dotnet/corefx/issues/10361
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            url = url.Replace("&", "^&");
+            Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            Process.Start("xdg-open", url);
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            Process.Start("open", url);
+        }
+        else
+        {
+            throw;
+        }      
+        */
     }
 }
