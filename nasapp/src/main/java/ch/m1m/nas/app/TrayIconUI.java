@@ -82,7 +82,7 @@ public class TrayIconUI {
     }
 
     public static ImageIcon getAppIcon() {
-        
+
         return appIcon;
     }
 
@@ -92,15 +92,19 @@ public class TrayIconUI {
 
             boolean forceCreateIcon = false;
 
-            Driver.NasStatus nasStatus = config.getNasForcedStatus();
-            if (nasStatus != Driver.NasStatus.UNKNOWN) {
-                LOG.warn("Skip calling NAS status because of forced config status {}", nasStatus);
+            // let the driver detect the actual version
+            nasDriver.getVersion();
 
-            } else {
-                nasStatus = nasDriver.getStatus();
-                if (nasStatus == Driver.NasStatus.SUCCESS) {
-                    queryIntervalSeconds = 30;
-                }
+            Driver.NasStatus nasStatus = nasDriver.getStatus();
+            if (nasStatus == Driver.NasStatus.SUCCESS) {
+                queryIntervalSeconds = 30;
+            }
+
+            Driver.NasStatus forcedNasStatus = config.getNasForcedStatus();
+            if (forcedNasStatus != Driver.NasStatus.UNKNOWN) {
+                LOG.warn("forced nas status is set by config overwriting actual status {} with config status {}",
+                        nasStatus, forcedNasStatus);
+                nasStatus = forcedNasStatus;
             }
 
             // update the tray icon only when needed to prevent flickering
@@ -133,13 +137,13 @@ public class TrayIconUI {
     }
 
     private void createTrayIconMenuWindows(String systemTrayIconName) {
-        
+
         LOG.info("create icon with image from {}", systemTrayIconName);
 
         FXTrayIcon trayIcon = new FXTrayIcon(NASControl.getUiStage(), getClass().getResource("/images/cloud-computing-gray-512x512.png"));
         trayIcon.clear();
         trayIcon.addExitItem(false);
-        
+
         // start with menu creation
         //
         javafx.scene.control.MenuItem menuItemSendWOL = new javafx.scene.control.MenuItem("Send WoL");
@@ -155,13 +159,13 @@ public class TrayIconUI {
         trayIcon.addMenuItem(menuItemWebUI);
 
         trayIcon.addSeparator();
-        
+
         javafx.scene.control.MenuItem menuItemSendShutdown = new javafx.scene.control.MenuItem("Send Shutdown");
         menuItemSendShutdown.setOnAction(e -> {
             nasDriver.shutdown();
         });
         trayIcon.addMenuItem(menuItemSendShutdown);
-        
+
         trayIcon.addSeparator();
 
         javafx.scene.control.MenuItem menuItemAbout = new javafx.scene.control.MenuItem("About...");
@@ -191,7 +195,7 @@ public class TrayIconUI {
     }
 
     private void createTrayIconMenu(String systemTrayIconName) {
-        
+
         createTrayIconMenuWindows(systemTrayIconName);
     }
 
