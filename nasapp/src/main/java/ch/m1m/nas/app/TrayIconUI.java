@@ -144,7 +144,7 @@ public class TrayIconUI {
 
         trayIcon.addSeparator();
 
-        javafx.scene.control.MenuItem menuItemExit = new javafx.scene.control.MenuItem("myExit");
+        javafx.scene.control.MenuItem menuItemExit = new javafx.scene.control.MenuItem("Exit");
         menuItemExit.setOnAction(e -> {
             System.out.println("calling exit(0)");
             trayIcon.hide();
@@ -154,9 +154,9 @@ public class TrayIconUI {
 
         //trayIcon.showErrorMessage("this is my error");
 
-        trayIcon.setTrayIconTooltip("Your NAS ist not connected");
+        //trayIcon.setTrayIconTooltip("Your NAS ist not connected");
         trayIcon.show();
-        // delete default menu entry
+        // delete the last default menu entry
         trayIcon.removeMenuItem(0);
     }
 
