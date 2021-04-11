@@ -50,6 +50,8 @@ public class PlatformWindows implements Platform {
     @Override
     public String getShellCommandDisplayURL(String url) {
         
+        // FIXME: https://stackoverflow.com/questions/5226212/how-to-open-the-default-webbrowser-using-java
+        
         //return String.format("start %s", url);
         return String.format("cmd \"/c start %s\"", url);
         
