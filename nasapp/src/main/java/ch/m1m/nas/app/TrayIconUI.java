@@ -8,6 +8,7 @@ import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
 import ch.m1m.nas.platform.api.Platform;
 
 import com.dustinredmond.fxtrayicon.FXTrayIcon;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,7 @@ public class TrayIconUI {
     }
 
     public static ImageIcon getAppIcon() {
+        
         return appIcon;
     }
 
@@ -131,16 +133,42 @@ public class TrayIconUI {
     }
 
     private void createTrayIconMenuWindows(String systemTrayIconName) {
+        
+        LOG.info("create icon with image from {}", systemTrayIconName);
 
         FXTrayIcon trayIcon = new FXTrayIcon(NASControl.getUiStage(), getClass().getResource("/images/cloud-computing-gray-512x512.png"));
         trayIcon.clear();
         trayIcon.addExitItem(false);
-
-        javafx.scene.control.MenuItem menuItemOptionsExit = new javafx.scene.control.MenuItem("myOptions");
-        menuItemOptionsExit.setOnAction(e -> {
-            System.out.println("selected options menu");
+        
+        // start with menu creation
+        //
+        javafx.scene.control.MenuItem menuItemSendWOL = new javafx.scene.control.MenuItem("Send WoL");
+        menuItemSendWOL.setOnAction(e -> {
+            sendWakeOnLan();
         });
-        trayIcon.addMenuItem(menuItemOptionsExit);
+        trayIcon.addMenuItem(menuItemSendWOL);
+
+        javafx.scene.control.MenuItem menuItemWebUI = new javafx.scene.control.MenuItem("Open WebUI");
+        menuItemWebUI.setOnAction(e -> {
+            openWebUI();
+        });
+        trayIcon.addMenuItem(menuItemWebUI);
+
+        trayIcon.addSeparator();
+        
+        javafx.scene.control.MenuItem menuItemSendShutdown = new javafx.scene.control.MenuItem("Send Shutdown");
+        menuItemSendShutdown.setOnAction(e -> {
+            nasDriver.shutdown();
+        });
+        trayIcon.addMenuItem(menuItemSendShutdown);
+        
+        trayIcon.addSeparator();
+
+        javafx.scene.control.MenuItem menuItemAbout = new javafx.scene.control.MenuItem("About...");
+        menuItemAbout.setOnAction(e -> {
+            AboutDialog.show();
+        });
+        trayIcon.addMenuItem(menuItemAbout);
 
         trayIcon.addSeparator();
 
@@ -152,15 +180,18 @@ public class TrayIconUI {
         });
         trayIcon.addMenuItem(menuItemExit);
 
+        // set more info states on the desktop
+        //
         //trayIcon.showErrorMessage("this is my error");
-
         //trayIcon.setTrayIconTooltip("Your NAS ist not connected");
+
         trayIcon.show();
-        // delete the last default menu entry
+        // remove the "Show Application" menu entry
         trayIcon.removeMenuItem(0);
     }
 
     private void createTrayIconMenu(String systemTrayIconName) {
+        
         createTrayIconMenuWindows(systemTrayIconName);
     }
 
@@ -173,9 +204,9 @@ public class TrayIconUI {
 
         // set icons
         //
-        String imagePath = "/images/" + systemTrayIconName;
+        //String imagePath = "/images/" + systemTrayIconName;
 
-        final TrayIcon trayIcon = new TrayIcon(createImage(imagePath, "tray icon"));
+        final TrayIcon trayIcon = new TrayIcon(createImage(systemTrayIconName, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
 
         try {
@@ -238,6 +269,7 @@ public class TrayIconUI {
     }
 
     private void sendWakeOnLan() {
+        LOG.info("sendWakeOnLan() called...");
         List<DatagramPacket> packets = Stream.of(7, 9)
                 .map(port -> WakeOnLanDatagramPacketFactory.newInstance(
                         config.getMacAddress(), config.getBroadcastAddress(), port))
@@ -298,6 +330,6 @@ public class TrayIconUI {
                     iconName = "cloud-computing-white-error-512x512.png";
                 }
         }
-        return iconName;
+        return "/images/" + iconName;
     }
 }
