@@ -182,17 +182,23 @@ public class TrayIconUI {
         });
         mainMenu.add(menuItemOpenWebUI);
 
+        mainMenu.add(new dorkbox.systemTray.Separator());
+
         dorkbox.systemTray.MenuItem menuItemSendShutdown = new dorkbox.systemTray.MenuItem("Send Shutdown", e -> {
             final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             nasDriver.shutdown();
         });
         mainMenu.add(menuItemSendShutdown);
 
+        mainMenu.add(new dorkbox.systemTray.Separator());
+
         dorkbox.systemTray.MenuItem menuItemAbout = new dorkbox.systemTray.MenuItem("About...", e -> {
             final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             AboutDialog.show();
         });
         mainMenu.add(menuItemAbout);
+
+        mainMenu.add(new dorkbox.systemTray.Separator());
 
         dorkbox.systemTray.MenuItem menuItemExit = new dorkbox.systemTray.MenuItem("Exit", e -> {
             final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
