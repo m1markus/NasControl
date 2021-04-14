@@ -26,7 +26,6 @@ public class NASControl extends Application {
     public static void main(String... args) {
         CommandLine clArgs = setupAndParseArgs(args);
         LOG.info("start {} {} with args: {}", PROGRAM_NAME, Version.getProjectVersion(), clArgs.getArgList());
-
         launch();
     }
 
@@ -54,10 +53,7 @@ public class NASControl extends Application {
 
         TrayIconUI trayIconUI = new TrayIconUI(config);
 
-        //Thread
-        Thread backgroundThread = new Thread(() -> {
-            trayIconUI.executeStatusLoop();
-        });
+        Thread backgroundThread = new Thread(trayIconUI::executeStatusLoop);
         backgroundThread.setDaemon(true);
         backgroundThread.start();
     }

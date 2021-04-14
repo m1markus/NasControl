@@ -5,6 +5,7 @@ package ch.m1m.nas.app;
 public class FatJarFXStarter {
 
     public static void main(String... args) {
+
         NASControl.main(args);
     }
 }
