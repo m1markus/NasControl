@@ -7,8 +7,6 @@ import ch.m1m.nas.lib.PlatformFactory;
 import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
 import ch.m1m.nas.platform.api.Platform;
 
-import com.dustinredmond.fxtrayicon.FXTrayIcon;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// https://github.com/dorkbox/SystemTray
+//
 // https://docs.oracle.com/javase/tutorial/uiswing/misc/systemtray.html
 
 public class TrayIconUI {
@@ -40,6 +40,7 @@ public class TrayIconUI {
     private Driver.NasStatus lastNasStatus;
     private int queryIntervalSeconds = 10;
     private boolean isDarkMode;
+    private dorkbox.systemTray.SystemTray systemTray;
 
     public TrayIconUI(Config config) {
         platform = PlatformFactory.getInstance();
@@ -59,6 +60,8 @@ public class TrayIconUI {
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
             LOG.info("system look and feel: {}", systemLookAndFeel);
 
+            // FIXME: not working
+            systemLookAndFeel = null;
             if (systemLookAndFeel == null) {
                 systemLookAndFeel = "javax.swing.plaf.metal.MetalLookAndFeel";
                 LOG.info("changed look and feel to: {}", systemLookAndFeel);
@@ -124,7 +127,10 @@ public class TrayIconUI {
 
             String iconName = getTrayIconNameFromStatus(nasStatus, isDarkMode);
             if (forceCreateIcon) {
-                createTrayIconMenu(iconName);
+                javafx.application.Platform.runLater(() -> {
+                    updateTrayIcon(iconName);
+
+                });
             }
 
             try {
@@ -136,9 +142,73 @@ public class TrayIconUI {
         }
     }
 
+    private void updateTrayIcon(String systemTrayIconName) {
+        LOG.info("update icon with image from {}", systemTrayIconName);
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(systemTrayIconName);
+        systemTray.setImage(stream);
+    }
+
+    private void createTrayIconMenuLinux(String systemTrayIconName) {
+        LOG.info("create icon with image from {}", systemTrayIconName);
+
+        dorkbox.systemTray.SystemTray.DEBUG = true; // for test apps, we always want to run in debug mode
+        // SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.Swing;
+        // for test apps, make sure the cache is always reset. These are the ones used, and you should never do this in production.
+        //CacheUtil.clear("SysTrayExample");
+
+        // SwingUtil.setLookAndFeel(null); // set Native L&F (this is the System L&F instead of CrossPlatform L&F)
+        // SystemTray.SWING_UI = new CustomSwingUI();
+        systemTray = dorkbox.systemTray.SystemTray.get("SysTrayExample1");
+        if (systemTray == null) {
+            throw new RuntimeException("Unable to load SystemTray!");
+        }
+
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(systemTrayIconName);
+        systemTray.installShutdownHook();
+        systemTray.setImage(stream);
+        systemTray.setTooltip("Mail Checker");
+        //systemTray.setStatus("No Mail");
+
+        dorkbox.systemTray.Menu mainMenu = systemTray.getMenu();
+
+        dorkbox.systemTray.MenuItem menuItemSendWoL = new dorkbox.systemTray.MenuItem("Send WoL", e -> {
+            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
+            sendWakeOnLan();
+        });
+        mainMenu.add(menuItemSendWoL);
+
+        dorkbox.systemTray.MenuItem menuItemOpenWebUI = new dorkbox.systemTray.MenuItem("Open WebUI", e -> {
+            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
+            openWebUI();
+        });
+        mainMenu.add(menuItemOpenWebUI);
+
+        dorkbox.systemTray.MenuItem menuItemSendShutdown = new dorkbox.systemTray.MenuItem("Send Shutdown", e -> {
+            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
+            nasDriver.shutdown();
+        });
+        mainMenu.add(menuItemSendShutdown);
+
+        dorkbox.systemTray.MenuItem menuItemAbout = new dorkbox.systemTray.MenuItem("About...", e -> {
+            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
+            AboutDialog.show();
+        });
+        mainMenu.add(menuItemAbout);
+
+        dorkbox.systemTray.MenuItem menuItemExit = new dorkbox.systemTray.MenuItem("Exit", e -> {
+            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
+            LOG.info("menu Exit pressed...");
+            systemTray.remove();
+            System.exit(0);
+        });
+        mainMenu.add(menuItemExit);
+    }
+
     private void createTrayIconMenuWindows(String systemTrayIconName) {
 
         LOG.info("create icon with image from {}", systemTrayIconName);
+
+        /*
 
         FXTrayIcon trayIcon = new FXTrayIcon(NASControl.getUiStage(), getClass().getResource("/images/cloud-computing-gray-512x512.png"));
         trayIcon.clear();
@@ -192,11 +262,12 @@ public class TrayIconUI {
         trayIcon.show();
         // remove the "Show Application" menu entry
         trayIcon.removeMenuItem(0);
+        */
     }
 
     private void createTrayIconMenu(String systemTrayIconName) {
-
-        createTrayIconMenuWindows(systemTrayIconName);
+        createTrayIconMenuLinux(systemTrayIconName);
+        //createTrayIconMenuWindows(systemTrayIconName);
     }
 
     private void createTrayIconMenuOSX(String systemTrayIconName) {
@@ -334,6 +405,6 @@ public class TrayIconUI {
                     iconName = "cloud-computing-white-error-512x512.png";
                 }
         }
-        return "/images/" + iconName;
+        return "images/" + iconName;
     }
 }
