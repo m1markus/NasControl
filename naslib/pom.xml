@@ -31,6 +31,11 @@
         </dependency>
         <dependency>
             <groupId>ch.m1m.nas</groupId>
+            <artifactId>m1m-nascontrol-platform-linux</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.m1m.nas</groupId>
             <artifactId>m1m-nascontrol-platform-windows</artifactId>
             <version>${project.version}</version>
         </dependency>

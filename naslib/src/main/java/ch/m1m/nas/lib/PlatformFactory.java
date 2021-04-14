@@ -29,6 +29,9 @@ public class PlatformFactory {
         if (SystemUtils.IS_OS_MAC_OSX) {
             platform = new PlatformOSX();
 
+        } else if (SystemUtils.IS_OS_LINUX) {
+            platform = new PlatformLinux();
+
         } else if (SystemUtils.IS_OS_WINDOWS) {
             platform = new PlatformWindows();
             

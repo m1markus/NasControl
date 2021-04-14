@@ -25,6 +25,7 @@
         <javax.json-api>1.1.4</javax.json-api>
         <applejavaextensions.version>1.4</applejavaextensions.version>
         <mvn.plugin.x.version></mvn.plugin.x.version>
+        <system.tray.version>4.1</system.tray.version>
     </properties>
 
     <dependencyManagement>
@@ -57,10 +58,11 @@
             </dependency>
 
             <dependency>
-                <groupId>com.dustinredmond.fxtrayicon</groupId>
-                <artifactId>FXTrayIcon</artifactId>
-                <version>2.7.2</version>
+                <groupId>com.dorkbox</groupId>
+                <artifactId>SystemTray</artifactId>
+                <version>${system.tray.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.apple</groupId>
                 <artifactId>AppleJavaExtensions</artifactId>
@@ -89,6 +91,7 @@
         <module>driver/api</module>
         <module>platform/api</module>
         <module>platform/windows</module>
+        <module>platform/linux</module>
         <module>platform/osx</module>
         <module>naslib</module>
         <module>driver/truenas</module>
