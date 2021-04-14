@@ -129,7 +129,6 @@ public class TrayIconUI {
             if (forceCreateIcon) {
                 javafx.application.Platform.runLater(() -> {
                     updateTrayIcon(iconName);
-
                 });
             }
 
