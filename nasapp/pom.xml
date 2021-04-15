@@ -120,6 +120,9 @@
                                     <artifact>*:*</artifact>
                                     <excludes>
                                         <exclude>module-info.class</exclude>
+                                        <excludes>META-INF/*.SF</excludes>
+                                        <excludes>META-INF/*.DSA</excludes>
+                                        <excludes>META-INF/*.RSA</excludes>
                                     </excludes>
                                 </filter>
                             </filters>
