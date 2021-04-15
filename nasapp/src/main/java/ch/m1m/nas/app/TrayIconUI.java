@@ -359,9 +359,14 @@ public class TrayIconUI {
 
     private void sendWakeOnLan() {
         LOG.info("sendWakeOnLan() called...");
+        String macAddress = config.getMacAddress();
+        String bcAddress = config.getBroadcastAddress();
+
+        LOG.info("broadcast address: {} mac address: {}", bcAddress, macAddress);
+
         List<DatagramPacket> packets = Stream.of(7, 9)
                 .map(port -> WakeOnLanDatagramPacketFactory.newInstance(
-                        config.getMacAddress(), config.getBroadcastAddress(), port))
+                        macAddress, bcAddress, port))
                 .collect(Collectors.toList());
 
         try (DatagramSocket socket = new DatagramSocket()) {
