@@ -7,6 +7,7 @@ import ch.m1m.nas.lib.PlatformFactory;
 import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
 import ch.m1m.nas.platform.api.Platform;
 
+import dorkbox.util.CacheUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,12 +159,13 @@ public class TrayIconUI {
     }
 
     private void createTrayIconMenuLinux(String systemTrayIconName) {
+        final String progName = "NasControl";
         LOG.info("create icon with image from {}", systemTrayIconName);
 
         dorkbox.systemTray.SystemTray.DEBUG = true; // for test apps, we always want to run in debug mode
         //dorkbox.systemTray.SystemTray.FORCE_TRAY_TYPE = dorkbox.systemTray.SystemTray.TrayType.Swing;
         // for test apps, make sure the cache is always reset. These are the ones used, and you should never do this in production.
-        //CacheUtil.clear("SysTrayExample");
+        CacheUtil.clear(progName);
 
         //dorkbox.systemTray.util.
 
@@ -174,7 +176,7 @@ public class TrayIconUI {
         // osx icon is shown but menu is not reacting
         //dorkbox.systemTray.SystemTray.SWING_UI = new dorkbox.systemTray.util.LinuxSwingUI();
 
-        systemTray = dorkbox.systemTray.SystemTray.get("SysTrayExample2");
+        systemTray = dorkbox.systemTray.SystemTray.get(progName);
         if (systemTray == null) {
             throw new RuntimeException("Unable to load SystemTray!");
         }
