@@ -8,6 +8,7 @@ import ch.m1m.nas.lib.WakeOnLanDatagramPacketFactory;
 import ch.m1m.nas.platform.api.Platform;
 
 import dorkbox.util.CacheUtil;
+import org.apache.commons.lang3.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,14 +49,11 @@ public class TrayIconUI {
         isDarkMode = platform.isTrayIconModeDark();
 
         try {
-
             // set application icon
             //
-            final InputStream stream = getClass().getClassLoader().getResourceAsStream("images/nascontrol_icon.png");
-            final BufferedImage image = ImageIO.read(stream);
+            final BufferedImage image = ImageIO.read(createInputStreamForImageResource("images/nascontrol_icon.png"));
             appIcon = new ImageIcon(image);
-            // FIXME: windows maybe does not accept .png files
-            //platform.setApplicationIcon(appIcon);
+            platform.setApplicationIcon(appIcon);
 
             // Setup look and feel
             String systemLookAndFeel = UIManager.getSystemLookAndFeelClassName();
@@ -145,34 +143,41 @@ public class TrayIconUI {
     private void updateTrayIcon(String systemTrayIconName) {
         LOG.info("update icon with image from {}", systemTrayIconName);
 
-        // update for linux
-        //
-        systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
-
-        // osx no update yet...
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            createTrayIconMenu(systemTrayIconName);
+        } else {
+            // update for linux
+            systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
+        }
     }
 
     private void createTrayIconMenu(String systemTrayIconName) {
-        createTrayIconMenuLinux(systemTrayIconName);
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            createTrayIconMenuOSX(systemTrayIconName);
+        } else {
+            createTrayIconMenuLinux(systemTrayIconName);
+        }
         //createTrayIconMenuWindows(systemTrayIconName);
-        //createTrayIconMenuOSX(systemTrayIconName);
     }
 
     private void createTrayIconMenuLinux(String systemTrayIconName) {
         final String progName = "NasControl";
         LOG.info("create icon with image from {}", systemTrayIconName);
 
-        dorkbox.systemTray.SystemTray.DEBUG = true; // for test apps, we always want to run in debug mode
-        //dorkbox.systemTray.SystemTray.FORCE_TRAY_TYPE = dorkbox.systemTray.SystemTray.TrayType.Swing;
+        // for test apps, we always want to run in debug mode
+        dorkbox.systemTray.SystemTray.DEBUG = true;
+
         // for test apps, make sure the cache is always reset. These are the ones used, and you should never do this in production.
         CacheUtil.clear(progName);
 
+        //dorkbox.systemTray.SystemTray.FORCE_TRAY_TYPE = dorkbox.systemTray.SystemTray.TrayType.Swing;
+        //
         //dorkbox.systemTray.util.
-
+        //
         // SwingUtil.setLookAndFeel(null); // set Native L&F (this is the System L&F instead of CrossPlatform L&F)
-
+        //
         //dorkbox.systemTray.SystemTray.SWING_UI = new dorkbox.systemTray.ui.osx._OsxNativeTray();
-
+        //
         // osx icon is shown but menu is not reacting
         //dorkbox.systemTray.SystemTray.SWING_UI = new dorkbox.systemTray.util.LinuxSwingUI();
 
@@ -183,7 +188,7 @@ public class TrayIconUI {
 
         systemTray.installShutdownHook();
         systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
-        systemTray.setTooltip("Mail Checker");
+        systemTray.setTooltip("NAS checker");
         //systemTray.setStatus("No Mail");
 
         dorkbox.systemTray.Menu mainMenu = systemTray.getMenu();
@@ -228,7 +233,6 @@ public class TrayIconUI {
         LOG.info("create icon with image from {}", systemTrayIconName);
 
         /*
-
         FXTrayIcon trayIcon = new FXTrayIcon(NASControl.getUiStage(), getClass().getResource("/images/cloud-computing-gray-512x512.png"));
         trayIcon.clear();
         trayIcon.addExitItem(false);
