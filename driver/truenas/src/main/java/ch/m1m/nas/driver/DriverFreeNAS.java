@@ -2,7 +2,6 @@ package ch.m1m.nas.driver;
 
 import ch.m1m.nas.driver.api.Driver;
 import ch.m1m.nas.lib.Config;
-import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 // started developing against FreeNAS 11.2
 // documentation: http://api.freenas.org/
@@ -75,15 +75,19 @@ public class DriverFreeNAS implements Driver {
         if (nasUser != null) {
             featureBasicAuth = HttpAuthenticationFeature.basic(nasUser, nasUserPassword);
         }
-        nasClient = ClientBuilder.newClient();
+        nasClient = ClientBuilder.newBuilder()
+                .connectTimeout(7, TimeUnit.SECONDS)
+                .readTimeout(7, TimeUnit.SECONDS)
+                .build();
+
         if (featureBasicAuth != null) {
             nasClient.register(featureBasicAuth);
         } else {
             log.debug("no BasicAuth feature to register");
         }
 
-        nasClient.property(ClientProperties.CONNECT_TIMEOUT, 3 * 1_000);
-        nasClient.property(ClientProperties.READ_TIMEOUT, 5 * 1_000);
+        //nasClient.property(ClientProperties.CONNECT_TIMEOUT, 7 * 1_000);
+        //nasClient.property(ClientProperties.READ_TIMEOUT, 7 * 1_000);
     }
 
     @Override
@@ -102,10 +106,10 @@ public class DriverFreeNAS implements Driver {
         return status;
     }
 
-    /** This version call upgrades silently from v1.0 to v2.0 protocol in the
+    /*
+     * This version upgrades silently from v1.0 to v2.0 protocol in the
      * case the first response ist not parsable by JSON e.g. throws an exception.
      *
-     * @return
      */
     @Override
     public String getVersion() {
@@ -269,7 +273,8 @@ public class DriverFreeNAS implements Driver {
         return rc;
     }
 
-    /** Used up to version 11.2 to determine the status.
+    /*
+     * Used up to version 11.2 to determine the status.
      * From 11.3 on we use queryPool().
      */
     private NasStatus queryStorageVolume() {
