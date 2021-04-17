@@ -146,8 +146,7 @@ public class TrayIconUI {
 
         // update for linux
         //
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(systemTrayIconName);
-        systemTray.setImage(stream);
+        systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
 
         // osx no update yet...
     }
@@ -180,9 +179,8 @@ public class TrayIconUI {
             throw new RuntimeException("Unable to load SystemTray!");
         }
 
-        InputStream stream = getClass().getClassLoader().getResourceAsStream(systemTrayIconName);
         systemTray.installShutdownHook();
-        systemTray.setImage(stream);
+        systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
         systemTray.setTooltip("Mail Checker");
         //systemTray.setStatus("No Mail");
 
@@ -393,14 +391,23 @@ public class TrayIconUI {
         }
     }
 
-    private Image createImage(String path) {
-        URL imageURL = getClass().getResource(path);
+    private Image createImage(String resPath) {
+        // osx needs a leading slash e.g: /images
+        if (!resPath.startsWith("/")) {
+            resPath = "/" + resPath;
+        }
+        URL imageURL = getClass().getResource(resPath);
         if (imageURL == null) {
-            LOG.error("Resource not found: {}", path);
+            LOG.error("Resource not found: {}", resPath);
             return null;
         } else {
             return (new ImageIcon(imageURL)).getImage();
         }
+    }
+
+    private InputStream createInputStreamForImageResource(String resPath) {
+        // linux port with stream resource without leading / for images
+        return getClass().getClassLoader().getResourceAsStream(resPath);
     }
 
     private String getTrayIconNameFromStatus(Driver.NasStatus status, boolean isDarkMode) {
