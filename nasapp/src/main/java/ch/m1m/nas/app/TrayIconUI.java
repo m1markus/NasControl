@@ -143,21 +143,39 @@ public class TrayIconUI {
 
     private void updateTrayIcon(String systemTrayIconName) {
         LOG.info("update icon with image from {}", systemTrayIconName);
+
+        // update for linux
+        //
         InputStream stream = getClass().getClassLoader().getResourceAsStream(systemTrayIconName);
         systemTray.setImage(stream);
+
+        // osx no update yet...
+    }
+
+    private void createTrayIconMenu(String systemTrayIconName) {
+        createTrayIconMenuLinux(systemTrayIconName);
+        //createTrayIconMenuWindows(systemTrayIconName);
+        //createTrayIconMenuOSX(systemTrayIconName);
     }
 
     private void createTrayIconMenuLinux(String systemTrayIconName) {
         LOG.info("create icon with image from {}", systemTrayIconName);
 
         dorkbox.systemTray.SystemTray.DEBUG = true; // for test apps, we always want to run in debug mode
-        // SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.Swing;
+        //dorkbox.systemTray.SystemTray.FORCE_TRAY_TYPE = dorkbox.systemTray.SystemTray.TrayType.Swing;
         // for test apps, make sure the cache is always reset. These are the ones used, and you should never do this in production.
         //CacheUtil.clear("SysTrayExample");
 
+        //dorkbox.systemTray.util.
+
         // SwingUtil.setLookAndFeel(null); // set Native L&F (this is the System L&F instead of CrossPlatform L&F)
-        // SystemTray.SWING_UI = new CustomSwingUI();
-        systemTray = dorkbox.systemTray.SystemTray.get("SysTrayExample1");
+
+        //dorkbox.systemTray.SystemTray.SWING_UI = new dorkbox.systemTray.ui.osx._OsxNativeTray();
+
+        // osx icon is shown but menu is not reacting
+        //dorkbox.systemTray.SystemTray.SWING_UI = new dorkbox.systemTray.util.LinuxSwingUI();
+
+        systemTray = dorkbox.systemTray.SystemTray.get("SysTrayExample2");
         if (systemTray == null) {
             throw new RuntimeException("Unable to load SystemTray!");
         }
@@ -270,11 +288,6 @@ public class TrayIconUI {
         */
     }
 
-    private void createTrayIconMenu(String systemTrayIconName) {
-        createTrayIconMenuLinux(systemTrayIconName);
-        //createTrayIconMenuWindows(systemTrayIconName);
-    }
-
     private void createTrayIconMenuOSX(String systemTrayIconName) {
         if (!SystemTray.isSupported()) {
             LOG.error("SystemTray is not supported");
@@ -285,7 +298,7 @@ public class TrayIconUI {
         // set icons
         //
         //String imagePath = "/images/" + systemTrayIconName;
-
+        //
         final TrayIcon trayIcon = new TrayIcon(createImage(systemTrayIconName, "tray icon"));
         final SystemTray tray = SystemTray.getSystemTray();
 
@@ -410,6 +423,8 @@ public class TrayIconUI {
                     iconName = "cloud-computing-white-error-512x512.png";
                 }
         }
+        // linux port with stream resource without leading / for images
+        // osx needs the /images
         return "images/" + iconName;
     }
 }
