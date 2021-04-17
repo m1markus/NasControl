@@ -48,6 +48,10 @@
             <groupId>com.dorkbox</groupId>
             <artifactId>SystemTray</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dorkbox</groupId>
+            <artifactId>Utilities</artifactId>
+        </dependency>
 
         <!--
         <dependency>
