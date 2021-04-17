@@ -189,13 +189,12 @@ public class TrayIconUI {
         dorkbox.systemTray.Menu mainMenu = systemTray.getMenu();
 
         dorkbox.systemTray.MenuItem menuItemSendWoL = new dorkbox.systemTray.MenuItem("Send WoL", e -> {
-            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
+            //final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             sendWakeOnLan();
         });
         mainMenu.add(menuItemSendWoL);
 
         dorkbox.systemTray.MenuItem menuItemOpenWebUI = new dorkbox.systemTray.MenuItem("Open WebUI", e -> {
-            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             openWebUI();
         });
         mainMenu.add(menuItemOpenWebUI);
@@ -203,7 +202,6 @@ public class TrayIconUI {
         mainMenu.add(new dorkbox.systemTray.Separator());
 
         dorkbox.systemTray.MenuItem menuItemSendShutdown = new dorkbox.systemTray.MenuItem("Send Shutdown", e -> {
-            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             nasDriver.shutdown();
         });
         mainMenu.add(menuItemSendShutdown);
@@ -211,7 +209,6 @@ public class TrayIconUI {
         mainMenu.add(new dorkbox.systemTray.Separator());
 
         dorkbox.systemTray.MenuItem menuItemAbout = new dorkbox.systemTray.MenuItem("About...", e -> {
-            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             AboutDialog.show();
         });
         mainMenu.add(menuItemAbout);
@@ -219,7 +216,6 @@ public class TrayIconUI {
         mainMenu.add(new dorkbox.systemTray.Separator());
 
         dorkbox.systemTray.MenuItem menuItemExit = new dorkbox.systemTray.MenuItem("Exit", e -> {
-            final dorkbox.systemTray.MenuItem entry = (dorkbox.systemTray.MenuItem) e.getSource();
             LOG.info("menu Exit pressed...");
             systemTray.remove();
             System.exit(0);
@@ -299,7 +295,7 @@ public class TrayIconUI {
         //
         //String imagePath = "/images/" + systemTrayIconName;
         //
-        final TrayIcon trayIcon = new TrayIcon(createImage(systemTrayIconName, "tray icon"));
+        final TrayIcon trayIcon = new TrayIcon(createImage(systemTrayIconName));
         final SystemTray tray = SystemTray.getSystemTray();
 
         try {
@@ -392,13 +388,13 @@ public class TrayIconUI {
         }
     }
 
-    private Image createImage(String path, String description) {
+    private Image createImage(String path) {
         URL imageURL = getClass().getResource(path);
         if (imageURL == null) {
             LOG.error("Resource not found: {}", path);
             return null;
         } else {
-            return (new ImageIcon(imageURL, description)).getImage();
+            return (new ImageIcon(imageURL)).getImage();
         }
     }
 
