@@ -102,6 +102,7 @@
         <module>naslib</module>
         <module>driver/truenas</module>
         <module>nasapp</module>
+        <module>nasdoc</module>
     </modules>
 
 </project>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ch.m1m.nas</groupId>
+        <artifactId>m1m-nascontrol-reactor</artifactId>
+        <version>1.0.1</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <artifactId>m1m-nascontrol-doc</artifactId>
+    <version>1.0.1</version>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>2.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-diagram</artifactId>
+                        <version>2.1.2</version>
+                    </dependency>
+                    <!--
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj</artifactId>
+                        <version>2.4.3</version>
+                    </dependency> -->
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>asciidoc-to-html</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <backend>html5</backend>
+                    <requires>
+                        <require>asciidoctor-diagram</require>
+                    </requires>
+                    <!--
+                    Scenarios for linking vs embedding assets:
+                    Link to both stylesheets and images::
+                      - don't set embedAssets option
+                      - set linkcss attribute to true
+                      - set imagesdir attribute to path relative to AsciiDoc source file
+                      <attributes>
+                          <linkcss>true</linkcss>
+                          <imagesdir>./images</imagesdir>
+                      </attributes>
+                    Embed stylesheets and images::
+                      - set embedAssets option to true
+                      - don't set linkcss attribute
+                      - set imagesdir attribute to path relative to project root
+                      <embedAssets>true</embedAssets>
+                      <attributes>
+                          <imagesdir>src/docs/asciidoc/images</imagesdir>
+                      </attributes>
+                    Link to stylesheets but embed images::
+                      - set embedAssets option to true
+                      - set linkcss attribute to true
+                      - set imagesdir attribute to path relative to project root
+                      <embedAssets>true</embedAssets>
+                      <attributes>
+                          <linkcss>true</linkcss>
+                          <imagesdir>src/docs/asciidoc/images</imagesdir>
+                      </attributes>
+                    Embed stylesheets but link images (default)::
+                      - don't set embedAssets option
+                      - don't set linkcss attribute
+                      - set imagesdir attribute to path relative to AsciiDoc source file
+                      <attributes>
+                          <imagesdir>./images</imagesdir>
+                      </attributes>
+                    IMPORTANT: When you enable image embedding, you must qualify the path the the imagesdir, as shown above.
+                    -->
+                    <attributes>
+                        <source-highlighter>coderay</source-highlighter>
+                        <imagesdir>./images</imagesdir>
+                        <toc>left</toc>
+                        <icons>font</icons>
+                        <sectanchors>true</sectanchors>
+                        <!-- set the idprefix to blank -->
+                        <idprefix/>
+                        <idseparator>-</idseparator>
+                        <docinfo1>true</docinfo1>
+                    </attributes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
