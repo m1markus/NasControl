@@ -1,0 +1,167 @@
+= NasControl - Technical Documentation
+:toclevels: 5
+:sectnums:
+:sectnumlevels: 5
+
+An icon is placed on your desktop to show the actual state of your NAS.
+
+== Introduction
+
+This implementation uses the Java programing language. Initially developed with version 1.8 on MacOS.
+To compile the software yourself you need the JDK and maven installed. Once the build
+
+[source, bash]
+----
+# after: git clone https://github.com/m1markus/NasControl.git
+
+mvn clean package
+----
+
+succeeded, you can run it with (adjust the version number).
+
+[source, bash]
+----
+java -jar ./nasapp/target/m1m-nascontrol-app-1.0.1.jar
+----
+
+
+== Project Structure
+
+=== Maven Modules
+
+Look at the toplevel pom.xml to see all the different modules (modules/module).
+
+* platform/api
+* platform/windows
+* platform/linux
+* platform/osx
+* driver/api
+* driver/truenas
+* naslib
+* nasapp
+* nasdoc
+
+
+==== platform/api
+
+Interface you have to implement to support a new platform. There are also changes needed in nasapp.
+It's still kind of work in progress.
+
+
+==== platform/windows
+
+Platform dependant code specific for Windows.
+
+
+==== platform/linux
+
+Platform dependant code specific for Linux.
+
+
+==== platform/osx
+
+Platform dependant code specific for MacOS.
+
+
+==== driver/api
+
+The interface you have to implement for writing a new driver.
+
+
+==== driver/truenas
+
+A driver for the https://www.truenas.com/[TrueNAS] / FreeNAS
+
+
+==== naslib
+
+Supporting code packaged as a separate JAR file.
+
+
+==== nasapp
+
+The core of the application constructing the icon on the desktop and starting the background thread.
+
+
+==== nasdoc
+
+There you find the source code of this documentation you're reading right now.
+To generate this documentation you need the 'dot' command from the https://graphviz.gitlab.io/[GraphViz] package installed.
+
+[source, bash]
+----
+brew install graphviz
+----
+
+
+=== Application Entry Point (main method)
+
+The class FatJarFXStarter is set as the mainClass for the Fat JAR m1m-nascontrol-app-x.y.z.jar. This is
+also the class to start from within your preferred IDE.
+
+[plantuml, img-app-startup-1, png]
+....
+FatJarFXStarter -> NASControl: main
+NASControl      -> NASControl: start (javaFX)
+NASControl      -> TrayIconUI: ctor
+NASControl      -> TrayIconUI: executeStatusLoop (thread)
+....
+
+
+== Asciidoc examples used as templates
+
+Show some source code inlined in this .adoc file.
+
+[source, bash]
+----
+echo "Hello, World!"
+# my comment
+----
+
+Show not the hole file, but just a part with:
+
+[source, java]
+----
+// tag::validateISBN[]
+...
+// end::validateISBN[]
+----
+
+
+[source, java]
+----
+include::/tmp/Book.java[tag=validateISBN]
+----
+
+
+Show the hole file
+[source, java]
+----
+include::../../test/java/ch/sympany/it/soa/syrius/gateway/ws/EvaluatePermissionsToPlayWith.java[]
+----
+
+
+[plantuml, img-seq-1, png]
+....
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+....
+
+=== Level 2 Section
+
+=== Another Level 2 Section
+
+[plantuml, diagram-classes, png]
+....
+class BlockProcessor
+class DiagramBlock
+class DitaaBlock
+class PlantUmlBlock
+
+BlockProcessor <|-- DiagramBlock
+DiagramBlock <|-- DitaaBlock
+DiagramBlock <|-- PlantUmlBlock
+....
