@@ -20,6 +20,7 @@ import dorkbox.util.Desktop;
 public
 class XTestTray {
 
+    /*
     public static final URL BLUE_CAMPING = XTestTray.class.getResource("accommodation_camping.glow.0092DA.32.png");
     public static final URL BLACK_FIRE = XTestTray.class.getResource("amenity_firestation.p.000000.32.png");
 
@@ -31,13 +32,17 @@ class XTestTray {
 
     public static final URL BLACK_TRAIN = XTestTray.class.getResource("transport_train_station.p.000000.32.png");
     public static final URL GREEN_TRAIN = XTestTray.class.getResource("transport_train_station.p.39AC39.32.png");
-    public static final URL LT_GRAY_TRAIN = XTestTray.class.getResource("transport_train_station.p.666666.32.png");
+    //public static final URL LT_GRAY_TRAIN = XTestTray.class.getResource("transport_train_station.p.666666.32.png");
+    */
+
+    public static URL IMG_CLOUD_GRAY;
 
     // from issue 123
-    public static final URL NOTIFY_IMAGE = XTestTray.class.getResource("RemoteNotifications.png");
+    //public static final URL NOTIFY_IMAGE = XTestTray.class.getResource("RemoteNotifications.png");
 
     public static void main(String[] args) {
         // make sure JNA jar is on the classpath!
+        IMG_CLOUD_GRAY = XTestTray.class.getResource("/images/cloud-computing-gray-512x512.png");
         new XTestTray();
     }
 
@@ -53,6 +58,7 @@ class XTestTray {
 
         // SwingUtil.setLookAndFeel(null); // set Native L&F (this is the System L&F instead of CrossPlatform L&F)
         // SystemTray.SWING_UI = new CustomSwingUI();
+        SystemTray.FORCE_TRAY_TYPE = SystemTray.TrayType.Awt;
         this.systemTray = SystemTray.get("SysTrayExample");
         if (systemTray == null) {
             throw new RuntimeException("Unable to load SystemTray!");
@@ -60,36 +66,37 @@ class XTestTray {
 
         systemTray.installShutdownHook();
         systemTray.setTooltip("Mail Checker");
-        systemTray.setImage(LT_GRAY_TRAIN);
-        systemTray.setStatus("No Mail");
+        systemTray.setImage(IMG_CLOUD_GRAY);
+        //systemTray.setStatus("No Mail");
 
+        /*
         callbackGray = e -> {
             final MenuItem entry = (MenuItem) e.getSource();
             systemTray.setStatus(null)
-                    .setImage(BLACK_TRAIN);
+                    .setImage(IMG_CLOUD_GRAY);
 
             entry.setCallback(null);
 //                systemTray.setStatus("Mail Empty");
             systemTray.getMenu().remove(entry);
             entry.remove();
             System.err.println("POW");
-        };
-
+        }; */
 
         Menu mainMenu = systemTray.getMenu();
 
+        /*
         MenuItem greenEntry = new MenuItem("Green Mail", e -> {
             final MenuItem entry = (MenuItem) e.getSource();
             systemTray.setStatus("Some Mail!");
-            systemTray.setImage(GREEN_TRAIN);
+            systemTray.setImage(IMG_CLOUD_GRAY);
 
             entry.setCallback(callbackGray);
-            entry.setImage(BLACK_MAIL);
+            entry.setImage(IMG_CLOUD_GRAY);
             entry.setText("Delete Mail");
             entry.setTooltip(null); // remove the tooltip
 //                systemTray.remove(menuEntry);
         });
-        greenEntry.setImage(GREEN_MAIL);
+        greenEntry.setImage(IMG_CLOUD_GRAY);
         // case does not matter
         greenEntry.setShortcut('G');
         greenEntry.setTooltip("This means you have green mail!");
@@ -100,17 +107,8 @@ class XTestTray {
         checkbox.setShortcut('€');
         mainMenu.add(checkbox);
 
-        MenuItem removeTest = new MenuItem("This should not be here", e -> {
-            try {
-                Desktop.browseURL("https://git.dorkbox.com/dorkbox/SystemTray");
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        });
-        mainMenu.add(removeTest);
-        mainMenu.remove(removeTest);
-
         mainMenu.add(new Separator());
+        */
 
         mainMenu.add(new MenuItem("About", e -> {
             try {
@@ -119,8 +117,7 @@ class XTestTray {
                 e1.printStackTrace();
             }
         }));
-
-
+/*
         mainMenu.add(new MenuItem("Temp Directory", e -> {
             try {
                 Desktop.browseDirectory(OS.TEMP_DIR.getAbsolutePath());
@@ -128,31 +125,28 @@ class XTestTray {
                 e1.printStackTrace();
             }
         }));
-
+/*
         mainMenu.add(new MenuItem("Notify", e -> {
             final MenuItem entry = (MenuItem) e.getSource();
             systemTray.setStatus("Notification!");
-            systemTray.setImage(NOTIFY_IMAGE);
+            systemTray.setImage(IMG_CLOUD_GRAY);
 
-            entry.setImage(NOTIFY_IMAGE);
+            entry.setImage(IMG_CLOUD_GRAY);
             entry.setText("Did notify");
             System.err.println("NOTIFICATION!");
         }));
 
-
-        Menu submenu = new Menu("Options", BLUE_CAMPING);
+        Menu submenu = new Menu("Options", IMG_CLOUD_GRAY);
         submenu.setShortcut('t');
 
-
-        MenuItem disableMenu = new MenuItem("Disable menu", BLACK_BUS, e -> {
+        MenuItem disableMenu = new MenuItem("Disable menu", IMG_CLOUD_GRAY, e -> {
             MenuItem source = (MenuItem) e.getSource();
             source.getParent().setEnabled(false);
         });
         submenu.add(disableMenu);
 
-
-        submenu.add(new MenuItem("Hide tray", LT_GRAY_BUS, e -> systemTray.setEnabled(false)));
-        submenu.add(new MenuItem("Remove menu", BLACK_FIRE, e -> {
+        submenu.add(new MenuItem("Hide tray", IMG_CLOUD_GRAY, e -> systemTray.setEnabled(false)));
+        submenu.add(new MenuItem("Remove menu", IMG_CLOUD_GRAY, e -> {
             MenuItem source = (MenuItem) e.getSource();
             source.getParent().remove();
         }));
@@ -164,6 +158,8 @@ class XTestTray {
         MenuItem entry = new MenuItem("Type: " + systemTray.getType().toString());
         entry.setEnabled(false);
         systemTray.getMenu().add(entry);
+
+ */
 
         systemTray.getMenu().add(new MenuItem("Quit", e -> {
             systemTray.shutdown();
