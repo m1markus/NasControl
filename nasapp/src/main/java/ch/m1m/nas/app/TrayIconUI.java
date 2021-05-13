@@ -142,22 +142,11 @@ public class TrayIconUI {
 
     private void updateTrayIcon(String systemTrayIconName) {
         LOG.info("update icon with image from {}", systemTrayIconName);
-
-        if (SystemUtils.IS_OS_MAC_OSX) {
-            createTrayIconMenu(systemTrayIconName);
-        } else {
-            // update for linux
-            systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
-        }
+        systemTray.setImage(createInputStreamForImageResource(systemTrayIconName));
     }
 
     private void createTrayIconMenu(String systemTrayIconName) {
-        if (SystemUtils.IS_OS_MAC_OSX) {
-            createTrayIconMenuOSX(systemTrayIconName);
-        } else {
-            createTrayIconMenuLinux(systemTrayIconName);
-        }
-        //createTrayIconMenuWindows(systemTrayIconName);
+        createTrayIconMenuLinux(systemTrayIconName);
     }
 
     private void createTrayIconMenuLinux(String systemTrayIconName) {
@@ -181,6 +170,9 @@ public class TrayIconUI {
         // osx icon is shown but menu is not reacting
         //dorkbox.systemTray.SystemTray.SWING_UI = new dorkbox.systemTray.util.LinuxSwingUI();
 
+        if (SystemUtils.IS_OS_MAC_OSX) {
+            dorkbox.systemTray.SystemTray.FORCE_TRAY_TYPE = dorkbox.systemTray.SystemTray.TrayType.Awt;
+        }
         systemTray = dorkbox.systemTray.SystemTray.get(progName);
         if (systemTray == null) {
             throw new RuntimeException("Unable to load SystemTray!");
@@ -226,139 +218,6 @@ public class TrayIconUI {
             System.exit(0);
         });
         mainMenu.add(menuItemExit);
-    }
-
-    private void createTrayIconMenuWindows(String systemTrayIconName) {
-
-        LOG.info("create icon with image from {}", systemTrayIconName);
-
-        /*
-        FXTrayIcon trayIcon = new FXTrayIcon(NASControl.getUiStage(), getClass().getResource("/images/cloud-computing-gray-512x512.png"));
-        trayIcon.clear();
-        trayIcon.addExitItem(false);
-
-        // start with menu creation
-        //
-        javafx.scene.control.MenuItem menuItemSendWOL = new javafx.scene.control.MenuItem("Send WoL");
-        menuItemSendWOL.setOnAction(e -> {
-            sendWakeOnLan();
-        });
-        trayIcon.addMenuItem(menuItemSendWOL);
-
-        javafx.scene.control.MenuItem menuItemWebUI = new javafx.scene.control.MenuItem("Open WebUI");
-        menuItemWebUI.setOnAction(e -> {
-            openWebUI();
-        });
-        trayIcon.addMenuItem(menuItemWebUI);
-
-        trayIcon.addSeparator();
-
-        javafx.scene.control.MenuItem menuItemSendShutdown = new javafx.scene.control.MenuItem("Send Shutdown");
-        menuItemSendShutdown.setOnAction(e -> {
-            nasDriver.shutdown();
-        });
-        trayIcon.addMenuItem(menuItemSendShutdown);
-
-        trayIcon.addSeparator();
-
-        javafx.scene.control.MenuItem menuItemAbout = new javafx.scene.control.MenuItem("About...");
-        menuItemAbout.setOnAction(e -> {
-            AboutDialog.show();
-        });
-        trayIcon.addMenuItem(menuItemAbout);
-
-        trayIcon.addSeparator();
-
-        javafx.scene.control.MenuItem menuItemExit = new javafx.scene.control.MenuItem("Exit");
-        menuItemExit.setOnAction(e -> {
-            System.out.println("calling exit(0)");
-            trayIcon.hide();
-            System.exit(0);
-        });
-        trayIcon.addMenuItem(menuItemExit);
-
-        // set more info states on the desktop
-        //
-        //trayIcon.showErrorMessage("this is my error");
-        //trayIcon.setTrayIconTooltip("Your NAS ist not connected");
-
-        trayIcon.show();
-        // remove the "Show Application" menu entry
-        trayIcon.removeMenuItem(0);
-        */
-    }
-
-    private void createTrayIconMenuOSX(String systemTrayIconName) {
-        if (!SystemTray.isSupported()) {
-            LOG.error("SystemTray is not supported");
-            System.exit(1);
-        }
-        final PopupMenu popup = new PopupMenu();
-
-        // set icons
-        //
-        //String imagePath = "/images/" + systemTrayIconName;
-        //
-        final TrayIcon trayIcon = new TrayIcon(createImage(systemTrayIconName));
-        final SystemTray tray = SystemTray.getSystemTray();
-
-        try {
-            // remove all old icons
-            //
-            TrayIcon[] oldIcons = tray.getTrayIcons();
-            int numOldIcons = oldIcons.length;
-            LOG.info("actual {} old icons in the systemTray", numOldIcons);
-            for (int ii = 0; ii < numOldIcons; ii++) {
-                if (oldIcons[ii] != null) {
-                    tray.remove(oldIcons[ii]);
-                }
-            }
-
-            // set the new icon
-            //
-            tray.add(trayIcon);
-
-        } catch (AWTException e) {
-            LOG.error("TrayIcon could not be added");
-            System.exit(1);
-        }
-
-        // Create a popup menu components
-        //
-        MenuItem sendWOL = new MenuItem("Send WoL");
-        MenuItem sendShutdown = new MenuItem("Send Shutdown");
-        MenuItem openWebUI = new MenuItem("Open WebUI");
-
-        MenuItem aboutItem = new MenuItem("About...");
-
-        MenuItem exitItem = new MenuItem("Exit");
-
-        popup.add(sendWOL);
-        popup.add(openWebUI);
-        popup.addSeparator();
-        popup.add(sendShutdown);
-
-        popup.addSeparator();
-        popup.add(aboutItem);
-
-        popup.addSeparator();
-        popup.add(exitItem);
-
-        trayIcon.setPopupMenu(popup);
-        trayIcon.addActionListener(e -> JOptionPane.showMessageDialog(null,
-                "This dialog box is run from System Tray"));
-
-        // Setup action listeners on menu items
-        sendWOL.addActionListener(e -> sendWakeOnLan());
-        openWebUI.addActionListener(e -> openWebUI());
-        sendShutdown.addActionListener(e -> nasDriver.shutdown());
-
-        aboutItem.addActionListener(e -> AboutDialog.show());
-
-        exitItem.addActionListener(e -> {
-            tray.remove(trayIcon);
-            System.exit(0);
-        });
     }
 
     private void sendWakeOnLan() {
