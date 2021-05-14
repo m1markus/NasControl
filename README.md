@@ -6,8 +6,8 @@
 Send a WoL (wake on lan) packet from your mac or pc to your NAS (network attached storage) device. It integrates into the SystemTray with a tiny icon. You have to build it from source yourself. It's written in Java.
 
 ## Prerequisite
-- Maven 3.6.2 or higher
-- JDK 1.8 or higher
+- Maven 3.8.1 or higher
+- JDK 11 or higher
 
 ## Build
 
@@ -48,6 +48,9 @@ Other names are possible too. In this order:
 - nascontrol.conf
 - nascontrol.cfg
 
+To get the mac address:
+- ping your NAS
+- call: arp -a
 
 ### 2. Install the NASControl.dmg
 ```
@@ -81,3 +84,17 @@ Once everything is working as expected you can start the application with:
 ```
 open -a /Applications/NASControl.app
 ```
+
+## Windows 10
+
+It should run on Windows 10 as well. At least as long as you meet the prerequisites.
+If the icon is not always visible in the bar you will not notice when it becomes red.
+I need a solution for that inconvenience.
+
+## Linux
+
+It was once running on Ubuntu 20.04.
+
+### Known issue
+
+Because of a [bug](https://github.com/dorkbox/SystemTray/issues/157) in [dorkbox/SystemTray](https://github.com/dorkbox/SystemTray) it's not running with Gnome 40.x and later.
