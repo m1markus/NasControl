@@ -137,7 +137,7 @@ include::/tmp/Book.java[tag=validateISBN]
 Show the hole file
 [source, java]
 ----
-include::../../test/java/ch/sympany/it/soa/syrius/gateway/ws/EvaluatePermissionsToPlayWith.java[]
+include::../../test/java/ch/m1m/example/MyTest.java[]
 ----
 
 
