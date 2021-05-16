@@ -98,3 +98,7 @@ It was once running on Ubuntu 20.04.
 ### Known issue
 
 Because of a [bug](https://github.com/dorkbox/SystemTray/issues/157) in [dorkbox/SystemTray](https://github.com/dorkbox/SystemTray) it's not running with Gnome 40.x and later.
+
+## Todo's
+
+- Build an installer with [launch4j](http://launch4j.sourceforge.net/)
